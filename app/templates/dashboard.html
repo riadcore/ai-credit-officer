@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Credit Officer Dashboard</title>
+    <style>
+        :root {
+            --bg-page:        #f3f4f6;
+            --bg-shell:       #e5e7eb;
+            --nav-bg:         #ffffff;
+            --nav-border:     #d1d5db;
+            --card-bg:        #ffffff;
+            --card-border:    #e5e7eb;
+            --accent:         #0f4c81;   /* deep navy */
+            --accent-soft:    #e0f2fe;
+            --accent-border:  #bfdbfe;
+            --danger:         #b91c1c;
+            --danger-soft:    #fee2e2;
+            --success:        #15803d;
+            --success-soft:   #dcfce7;
+            --warning:        #b45309;
+            --warning-soft:   #fef3c7;
+            --text-main:      #111827;
+            --text-muted:     #6b7280;
+            --shadow-soft:    0 10px 30px rgba(15, 23, 42, 0.08);
+            --radius-xl:      14px;
+
+            /* palette for nav + buttons */
+            --nav-inactive-bg: #e6f2ff;      /* pale azure blue */
+            --btn-slate-soft:  #94a3b8;      /* restart */
+            --btn-slate-soft-h:#64748b;
+            --btn-steel:       #b0c4de;      /* light steel grey */
+            --btn-steel-h:     #9fb4d0;
+            --emerald:         #10b981;      /* active model */
+            --emerald-dark:    #059669;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+        }
+
+        .shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 14px 18px 0;
+        }
+
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: var(--nav-bg);
+            border: 1px solid var(--nav-border);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 20%, #f9fafb, #0f4c81);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.08);
+        }
+
+        .nav-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-title-main {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .nav-title-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #0f4c81;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--nav-inactive-bg);   /* pale azure blue */
+            border: 1px solid transparent;
+            transition: background 0.12s, color 0.12s, border-color 0.12s;
+        }
+
+        .nav-link:hover {
+            background: #d4e7ff;
+            border-color: #bfdbfe;
+        }
+
+        .nav-link.active {
+            background: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+
+        .badge-chip {
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            font-size: 11px;
+            color: #4b5563;
+        }
+
+        .page-wrapper {
+            max-width: 1180px;
+            margin: 16px auto 28px;
+            padding: 0 18px 10px;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            gap: 10px;
+        }
+
+        .top-left h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .top-left p {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 2.1fr) minmax(0, 2.4fr);
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-soft);
+            padding: 16px 18px 18px;
+            margin-bottom: 14px;
+        }
+
+        .card h2 {
+            margin: 0 0 4px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .fields-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px 18px;
+            margin-bottom: 8px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 13px;
+        }
+
+        .field label {
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .field input,
+        .field select {
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            padding: 7px 9px;
+            font-size: 13px;
+            outline: none;
+            background: #ffffff;
+            color: var(--text-main);
+            transition: border-color 0.12s, box-shadow 0.12s;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18);
+        }
+
+        .field small {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn {
+            background: var(--accent);
+            color: #ffffff;
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            font-size: 13px;
+            padding: 9px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 10px 20px rgba(15, 76, 129, 0.25);
+            transition: background 0.12s, box-shadow 0.12s, transform 0.08s;
+        }
+
+        .primary-btn:hover {
+            background: #0b3a61;
+            transform: translateY(-1px);
+            box-shadow: 0 14px 24px rgba(15, 76, 129, 0.3);
+        }
+
+        .secondary-btn {
+            flex: 0 0 auto;
+            background: #ffffff;
+            color: var(--text-muted);
+            border-radius: 999px;
+            border: 1px solid #d1d5db;
+            font-size: 13px;
+            padding: 8px 14px;
+            cursor: pointer;
+            transition: background 0.12s, color 0.12s, border-color 0.12s;
+        }
+
+        .secondary-btn:hover {
+            background: #f3f4f6;
+            color: #111827;
+            border-color: #9ca3af;
+        }
+
+        .btn-restart {
+            background: var(--btn-slate-soft);
+            border-color: var(--btn-slate-soft);
+            color: #ffffff;
+        }
+        .btn-restart:hover {
+            background: var(--btn-slate-soft-h);
+            border-color: var(--btn-slate-soft-h);
+            color: #ffffff;
+        }
+
+        .btn-steel {
+            background: var(--btn-steel);   /* Upload CSV / Retrain */
+            border-color: #9ca3af;
+            color: #111827;
+        }
+        .btn-steel:hover {
+            background: var(--btn-steel-h);
+            border-color: #9ca3af;
+            color: #111827;
+        }
+
+        .admin-action-btn {
+            background: var(--btn-steel);   /* Deploy / Download / Delete default */
+            border-color: #9ca3af;
+            color: #111827;
+        }
+        .admin-action-btn:hover:enabled {
+            background: var(--btn-steel-h);
+        }
+        .admin-action-btn[disabled] {
+            opacity: 0.9;
+            cursor: default;
+        }
+
+        .danger-btn {
+            flex: 0 0 auto;
+            background: var(--danger);
+            color: #ffffff;
+            border-radius: 999px;
+            border: 1px solid var(--danger);
+            font-size: 13px;
+            padding: 8px 14px;
+            cursor: pointer;
+            transition: background 0.12s, box-shadow 0.12s, transform 0.08s;
+            box-shadow: 0 8px 18px rgba(185, 28, 28, 0.24);
+        }
+
+        .danger-btn:hover {
+            background: #7f1d1d;
+            transform: translateY(-1px);
+        }
+
+        .error-text {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .result-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #0f172a;
+        }
+
+        .decision-pill {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .decision-approve {
+            background: var(--success-soft);
+            color: var(--success);
+            border: 1px solid #bbf7d0;
+        }
+
+        .decision-review {
+            background: var(--warning-soft);
+            color: var(--warning);
+            border: 1px solid #fed7aa;
+        }
+
+        .decision-reject {
+            background: var(--danger-soft);
+            color: var(--danger);
+            border: 1px solid #fecaca;
+        }
+
+        .result-box {
+            font-size: 13px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            min-height: 90px;
+        }
+
+        .fraud-box {
+            background: #f9fafb;
+            border-left: 4px solid #9ca3af;
+            border-radius: 10px;
+            padding: 8px 12px 10px;
+            margin-top: 10px;
+            font-size: 13px;
+            border-top: 1px solid #e5e7eb;
+            border-right: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .fraud-flag {
+            display: block;
+            margin-top: 2px;
+        }
+
+        .badge-small {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: #e5e7eb;
+            color: #111827;
+            margin-left: 6px;
+        }
+
+        .badge-fraud-normal {
+            background: var(--success-soft);
+            color: var(--success);
+        }
+
+        .badge-fraud-borderline {
+            background: #fef3c7; /* soft amber */
+            color: #92400e;
+        }
+
+        .badge-fraud-unusual {
+            background: var(--warning-soft);
+            color: var(--warning);
+        }
+
+        .badge-fraud-highly {
+            background: var(--danger-soft);
+            color: var(--danger);
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        #retrain_status {
+            font-size: 12px;
+            margin-top: 6px;
+            color: var(--text-muted);
+        }
+
+        .metrics-block {
+            margin-top: 10px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: #f9fafb;
+            border: 1px dashed #d1d5db;
+            font-size: 12px;
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        .metrics-block strong {
+            color: #111827;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #16a34a;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 0 rgba(34,197,94,0.8);
+            animation: pulse 1.6s infinite;
+        }
+
+        @keyframes pulse {
+            0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.8); }
+            70%  { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+            100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+        }
+
+        .drift-pill {
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .drift-stable {
+            background: var(--success-soft);
+            color: var(--success);
+            border: 1px solid #bbf7d0;
+        }
+
+        .drift-monitor {
+            background: var(--warning-soft);
+            color: var(--warning);
+            border: 1px solid #fed7aa;
+        }
+
+        .drift-drift {
+            background: var(--danger-soft);
+            color: var(--danger);
+            border: 1px solid #fecaca;
+        }
+
+        /* ------- Model performance layout (drift + AUC + Gini) ------- */
+        .perf-top-layout {
+            display: flex;
+            gap: 14px;
+            align-items: stretch;
+            margin-bottom: 10px;
+        }
+
+        .drift-chart-shell {
+            flex: 1.7;
+            background: radial-gradient(circle at 50% 0%, #ffffff, #e5e7eb);
+            border-radius: 12px;
+            padding: 10px 12px 8px;
+            box-shadow:
+                inset 0 1px 2px rgba(255,255,255,0.7),
+                0 10px 24px rgba(15,23,42,0.12);
+        }
+
+        .drift-score-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .drift-score-label span {
+            font-weight: 600;
+        }
+
+        .drift-legend-card {
+            flex: 1;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+            padding: 10px 12px;
+            font-size: 12px;
+            color: #374151;
+            box-shadow: 0 10px 24px rgba(15,23,42,0.06);
+        }
+
+        .drift-legend-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .drift-legend-line {
+            margin-top: 2px;
+        }
+
+        .perf-bottom-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 10px;
+            margin-top: 6px;
+        }
+
+        .perf-metric-block {
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            padding: 10px 12px;
+            background: #f9fafb;
+        }
+
+        .perf-metric-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            color: #0f172a;
+        }
+
+        .perf-metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .perf-metric-tag {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .perf-metric-scale {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        /* horizontal scroll wrapper for wide tables */
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* make canvas responsive */
+        #driftChart {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ------- Responsive tweaks ------- */
+        @media (max-width: 900px) {
+            .top-nav {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .layout {
+                grid-template-columns: minmax(0, 1fr);
+            }
+            .page-wrapper {
+                padding: 0 12px 10px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav-right {
+                flex-wrap: wrap;
+                row-gap: 6px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .card {
+                padding: 14px 12px 16px;
+            }
+
+            .fields-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .button-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .button-row button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .perf-top-layout {
+                flex-direction: column;
+            }
+
+            .perf-bottom-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="shell">
+    <header class="top-nav">
+        <div class="nav-left">
+            <div class="nav-logo">AI</div>
+            <div class="nav-title">
+                <span class="nav-title-main">AI Credit Officer</span>
+                <span class="nav-title-sub">Inclusive micro-lending engine</span>
+            </div>
+        </div>
+        <div class="nav-right">
+            <a href="/dashboard" class="nav-link active">Dashboard</a>
+            <a href="/history_view" class="nav-link">Decision History</a>
+            <span class="badge-chip">XGBoost · SHAP · IsolationForest</span>
+        </div>
+    </header>
+</div>
+
+<div class="page-wrapper">
+    <div class="top-bar">
+        <div class="top-left">
+            <h1>Borrower Scoring</h1>
+            <p>Score micro-loans with explainable credit and fraud risk in seconds.</p>
+        </div>
+    </div>
+
+    <div class="layout">
+        <!-- LEFT: Borrower + Admin -->
+        <div>
+            <div class="card">
+                <h2>Borrower Input</h2>
+                <div class="card-subtitle">
+                    Fill borrower details and click <b>Score Borrower</b>.
+                </div>
+
+                <div class="fields-grid">
+                    <div class="field">
+                        <label>Borrower ID</label>
+                        <input id="borrower_id" type="text" value="BR123" />
+                    </div>
+
+                    <div class="field">
+                        <label>Monthly Income</label>
+                        <input id="monthly_income" type="number" value="20000" />
+                    </div>
+
+                    <div class="field">
+                        <label>Monthly Expense</label>
+                        <input id="monthly_expense" type="number" value="12000" />
+                    </div>
+
+                    <div class="field">
+                        <label>Age</label>
+                        <input id="age" type="number" value="29" />
+                    </div>
+
+                    <div class="field">
+                        <label>Has Smartphone?</label>
+                        <select id="has_smartphone">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Has Wallet?</label>
+                        <select id="has_wallet">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Avg Wallet Balance</label>
+                        <input id="avg_wallet_balance" type="number" value="2500" />
+                    </div>
+
+                    <div class="field">
+                        <label>On-time Payment Ratio (0–1)</label>
+                        <input id="on_time_payment_ratio" type="number" step="0.01" value="0.85" />
+                    </div>
+
+                    <div class="field">
+                        <label>Number of Loans Taken</label>
+                        <input id="num_loans_taken" type="number" value="2" />
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button class="primary-btn" type="button" onclick="scoreBorrower()">Score Borrower</button>
+                    <button class="secondary-btn btn-restart" type="button" onclick="restartForm()">Restart</button>
+                </div>
+                <div id="error" class="error-text"></div>
+            </div>
+
+            <div class="card">
+                <h2>Model Maintenance (Admin)</h2>
+                <p class="subtitle">
+                    Upload labeled training CSV and retrain ML models. Latest model is also saved as a versioned file.
+                </p>
+
+                <div class="field" style="margin-bottom:8px;">
+                    <label>Upload Training CSV</label>
+                    <input type="file" id="trainingCsvInput" />
+                </div>
+
+                <div class="button-row">
+                    <button class="secondary-btn btn-steel" type="button" onclick="uploadTrainingCSV()">
+                        Upload CSV
+                    </button>
+                    <button class="secondary-btn btn-steel" type="button" onclick="retrainModel()">
+                        Retrain Model
+                    </button>
+                </div>
+
+                <div id="retrain_status"></div>
+
+                <div class="metrics-block" id="training_metrics">
+                    <div><strong>Last AUC:</strong> <span id="m_auc">–</span></div>
+                    <div><strong>Rows used:</strong> <span id="m_rows">–</span></div>
+                    <div><strong>Last trained:</strong> <span id="m_time">–</span></div>
+                    <div><strong>Model file:</strong> <span id="m_file">–</span></div>
+                    <div><strong>Drift:</strong> <span id="m_drift">–</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Result + Model Performance -->
+        <div>
+            <div class="card">
+                <div class="result-header">
+                    <h2 class="result-title">Result</h2>
+                    <div id="decision_badge"></div>
+                </div>
+                <div class="result-box" id="result_box">
+                    Waiting for result...
+                </div>
+                <div class="fraud-box" id="fraud_box">
+                    Waiting for fraud analysis...
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+                    <div>
+                        <h2>Model Performance</h2>
+                        <div class="subtitle"></div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div id="drift_badge"></div>
+                        <div class="live-indicator" id="live_indicator">
+                            <span class="live-dot"></span>
+                            <span>Live updating</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOP: Drift chart + legend -->
+                <div class="perf-top-layout">
+                    <div class="drift-chart-shell">
+                        <div class="drift-score-label">
+                            Drift score: <span id="drift_score_value">–</span>
+                        </div>
+                        <canvas id="driftChart" width="360" height="140"></canvas>
+                    </div>
+
+                    <div class="drift-legend-card">
+                        <div class="drift-legend-title" id="drift_state_text">Stable</div>
+                        <div class="drift-legend-line">Stable (0.00–0.20)</div>
+                        <div class="drift-legend-line">Monitor (0.21–0.50)</div>
+                        <div class="drift-legend-line">Drift (0.51–1.00)</div>
+                    </div>
+                </div>
+
+                <!-- BOTTOM: AUC + Gini metrics -->
+                <div class="perf-bottom-grid">
+                    <div class="perf-metric-block">
+                        <div class="perf-metric-title">AUC</div>
+                        <div class="perf-metric-value" id="metric_auc_value">–</div>
+                        <div class="perf-metric-tag" id="metric_auc_tag">–</div>
+                        <div class="perf-metric-scale">
+                            POOR (0.50–0.60) · FAIR (0.61–0.70) · GOOD (0.71–1.00)
+                        </div>
+                    </div>
+
+                    <div class="perf-metric-block">
+                        <div class="perf-metric-title">Gini</div>
+                        <div class="perf-metric-value" id="metric_gini_value">–</div>
+                        <div class="perf-metric-tag" id="metric_gini_tag">–</div>
+                        <div class="perf-metric-scale">
+                            LOW (0.00–0.30) · MEDIUM (0.31–0.50) · HIGH (0.51–1.00)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HISTORY TABLE -->
+                <div class="table-scroll">
+                    <table style="width:100%; font-size:12px; border-collapse:collapse;">
+                        <thead>
+                            <tr style="background:#f3f4f6;">
+                                <th style="text-align:left; padding:4px 6px;">#</th>
+                                <th style="text-align:left; padding:4px 6px;">Version</th>
+                                <th style="text-align:left; padding:4px 6px;">Time</th>
+                                <th style="text-align:right; padding:4px 6px;">AUC</th>
+                                <th style="text-align:right; padding:4px 6px;">Δ</th>
+                                <th style="text-align:right; padding:4px 6px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyRows"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let activeVersion = null;
+let activeDriftLabel = null;
+
+/* ------- Borrower scoring ------- */
+async function scoreBorrower() {
+    document.getElementById("error").innerText = "";
+    document.getElementById("result_box").innerText = "Scoring borrower...";
+    document.getElementById("fraud_box").innerText = "Checking fraud risk...";
+    document.getElementById("decision_badge").innerHTML = "";
+
+    const payload = {
+        borrower_id: document.getElementById("borrower_id").value,
+        monthly_income: parseFloat(document.getElementById("monthly_income").value),
+        monthly_expense: parseFloat(document.getElementById("monthly_expense").value),
+        age: parseInt(document.getElementById("age").value),
+        has_smartphone: document.getElementById("has_smartphone").value === "true",
+        has_wallet: document.getElementById("has_wallet").value === "true",
+        avg_wallet_balance: parseFloat(document.getElementById("avg_wallet_balance").value),
+        on_time_payment_ratio: parseFloat(document.getElementById("on_time_payment_ratio").value),
+        num_loans_taken: parseInt(document.getElementById("num_loans_taken").value)
+    };
+
+    try {
+        const resp = await fetch("/decision", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) {
+            const text = await resp.text();
+            document.getElementById("error").innerText = "Error: " + text;
+            document.getElementById("result_box").innerText = "Failed.";
+            document.getElementById("fraud_box").innerText = "Failed.";
+            return;
+        }
+
+        const data = await resp.json();
+        const credit = data.credit;
+        const fraud = data.fraud;
+
+        const riskPct = (credit.risk_score * 100).toFixed(1);
+
+        let badgeClass = "decision-review";
+        if (credit.decision === "APPROVE") badgeClass = "decision-approve";
+        else if (credit.decision === "REJECT_OR_SMALL_LIMIT") badgeClass = "decision-reject";
+
+        document.getElementById("decision_badge").innerHTML =
+            `<span class="decision-pill ${badgeClass}">${credit.decision} (Risk: ${riskPct}%)</span>`;
+
+        let factorsText = "";
+        if (credit.top_factors && credit.top_factors.length > 0) {
+            factorsText += `<b>Top Factors:</b><br>`;
+            credit.top_factors.forEach((f, idx) => {
+                factorsText += `${idx + 1}. ${f.feature} (${f.direction}) → impact=${f.impact.toFixed(4)}<br>`;
+            });
+        }
+
+        const htmlText = `
+<b>Borrower:</b> ${data.borrower_id}<br>
+<b>Risk score (PD):</b> ${riskPct}%<br>
+<b>Decision:</b> ${credit.decision}<br>
+<b>Explanation:</b> ${credit.explanation}<br><br>
+${factorsText}
+        `;
+        document.getElementById("result_box").innerHTML = htmlText;
+
+        const fraudPct = (fraud.fraud_score * 100).toFixed(1);
+
+        // 4-level badge mapping
+        let fraudBadgeClass = "badge-fraud-normal";
+        if (fraud.risk_label === "HIGHLY_ANOMALOUS") fraudBadgeClass = "badge-fraud-highly";
+        else if (fraud.risk_label === "UNUSUAL") fraudBadgeClass = "badge-fraud-unusual";
+        else if (fraud.risk_label === "BORDERLINE") fraudBadgeClass = "badge-fraud-borderline";
+
+        let fraudText = `
+        <b>Fraud Risk Score:</b> ${fraudPct}% 
+        <span class="badge-small ${fraudBadgeClass}">${fraud.risk_label}</span><br><br>
+        `;
+
+
+        if (fraud.flags && fraud.flags.length) {
+            fraudText += `<b>Flags:</b><br>`;
+            fraud.flags.forEach(f => {
+                const icon = fraudIcon(fraud.fraud_label || fraud.risk_label);
+
+                const color =
+                    (fraud.fraud_label || fraud.risk_label) === "HIGHLY_ANOMALOUS"
+                        ? "#b91c1c"
+                        : ((fraud.fraud_label || fraud.risk_label) === "UNUSUAL" ||
+                        (fraud.fraud_label || fraud.risk_label) === "BORDERLINE")
+                            ? "#b45309"
+                            : "#374151";
+
+                fraudText += `
+                    <span class="fraud-flag" style="color:${color};">
+                        ${icon ? icon + " " : ""}${f}
+                    </span><br>
+                `;
+            });
+        }
+
+        document.getElementById("fraud_box").innerHTML = fraudText;
+
+    } catch (err) {
+        console.error("Exception in scoreBorrower:", err);
+        document.getElementById("error").innerText = "Exception: " + err;
+        document.getElementById("result_box").innerText = "Failed.";
+        document.getElementById("fraud_box").innerText = "Failed.";
+    }
+}
+
+function restartForm() {
+    document.getElementById("borrower_id").value = "";
+    document.getElementById("monthly_income").value = "";
+    document.getElementById("monthly_expense").value = "";
+    document.getElementById("age").value = "";
+    document.getElementById("has_smartphone").value = "true";
+    document.getElementById("has_wallet").value = "true";
+    document.getElementById("avg_wallet_balance").value = "";
+    document.getElementById("on_time_payment_ratio").value = "";
+    document.getElementById("num_loans_taken").value = "";
+
+    document.getElementById("result_box").innerText = "Waiting for result...";
+    document.getElementById("fraud_box").innerText = "Waiting for fraud analysis...";
+    document.getElementById("decision_badge").innerHTML = "";
+    document.getElementById("error").innerText = "";
+}
+
+/* ------- Upload training CSV ------- */
+async function uploadTrainingCSV() {
+    const fileInput = document.getElementById("trainingCsvInput");
+    const statusEl = document.getElementById("retrain_status");
+
+    if (!fileInput.files.length) {
+        statusEl.innerText = "Please choose a CSV first.";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+
+    try {
+        const resp = await fetch("/admin/upload_training_csv", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await resp.json();
+
+        if (!resp.ok) {
+            statusEl.innerText = "Upload failed: " + (data.detail || "Unknown error");
+            return;
+        }
+
+        statusEl.innerText = "Uploaded successfully: " + (data.file || "");
+    } catch (err) {
+        statusEl.innerText = "Error during upload: " + err;
+    }
+}
+
+
+// ---------------- FRAUD ICON HELPER ----------------
+function fraudIcon(label) {
+    if (label === "HIGHLY_ANOMALOUS") return "❌";
+    if (label === "UNUSUAL" || label === "BORDERLINE") return "⚠️";
+    return ""; // NO ✓ for fraud context
+}
+
+
+
+
+/* ------- Drift chart + metric cards ------- */
+
+function drawDriftChart(history) {
+    const canvas = document.getElementById("driftChart");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.clearRect(0, 0, w, h);
+
+    const scores = (history || [])
+        .map(r => {
+            const v = (typeof r.drift_score === "number") ? r.drift_score : parseFloat(r.drift_score);
+            return isNaN(v) ? null : v;
+        })
+        .filter(v => v !== null);
+
+    if (!scores.length) {
+        ctx.fillStyle = "#9ca3af";
+        ctx.font = "12px system-ui";
+        ctx.fillText("No drift data yet", 12, h / 2);
+        return;
+    }
+
+    const padding = 12;
+    const usableW = w - padding * 2;
+    const usableH = h - padding * 2;
+
+    const minY = 0.0;
+    const maxY = 1.0;
+
+    // grid line at 0.2 and 0.5 (stable / monitor thresholds)
+    ctx.strokeStyle = "#e5e7eb";
+    ctx.lineWidth = 1;
+    [0.2, 0.5].forEach(level => {
+        const y = padding + usableH * (1 - (level - minY) / (maxY - minY));
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(w - padding, y);
+        ctx.stroke();
+    });
+
+    const stepX = scores.length > 1 ? usableW / (scores.length - 1) : 0;
+
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#111827";
+
+    scores.forEach((v, i) => {
+        const x = padding + stepX * i;
+        const y = padding + usableH * (1 - (v - minY) / (maxY - minY));
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // small dots
+    ctx.fillStyle = "#111827";
+    scores.forEach((v, i) => {
+        const x = padding + stepX * i;
+        const y = padding + usableH * (1 - (v - minY) / (maxY - minY));
+        ctx.beginPath();
+        ctx.arc(x, y, 2.5, 0, 2 * Math.PI);
+        ctx.fill();
+    });
+
+    // y-axis labels 0.0 and 1.0
+    ctx.fillStyle = "#6b7280";
+    ctx.font = "10px system-ui";
+    ctx.fillText("1.0", 4, padding + 4);
+    ctx.fillText("0.0", 4, h - padding);
+}
+
+function classifyAuc(auc) {
+    if (auc == null) return "-";
+    if (auc >= 0.71) return "GOOD";
+    if (auc >= 0.61) return "FAIR";
+    return "POOR";
+}
+
+function classifyGini(gini) {
+    if (gini == null) return "-";
+    if (gini >= 0.51) return "HIGH";
+    if (gini >= 0.31) return "MEDIUM";
+    return "LOW";
+}
+
+/* ------- Metrics / history helpers ------- */
+function applyMetricsToUI(m) {
+    if (!m) return;
+
+    activeVersion = m.version_tag || null;
+    activeDriftLabel = (m.drift_label || "").toUpperCase() || null;
+
+    const auc = m.last_auc;
+    const rows = m.rows || m.last_rows;
+    const driftScore = (typeof m.drift_score === "number")
+        ? m.drift_score
+        : (m.drift_score != null ? parseFloat(m.drift_score) : null);
+
+    // Old metrics block on the left
+    document.getElementById("m_auc").innerText =
+        typeof auc === "number" ? auc.toFixed(3) : (auc ?? "–");
+    document.getElementById("m_rows").innerText = rows ?? "–";
+    document.getElementById("m_time").innerText = m.last_trained_at || "–";
+    document.getElementById("m_file").innerText = m.version_path || m.last_file || "–";
+    document.getElementById("m_drift").innerText = m.drift_label || "–";
+
+    // New: drift score label above the chart
+    const driftScoreEl = document.getElementById("drift_score_value");
+    if (driftScoreEl) {
+        if (driftScore != null && !isNaN(driftScore)) {
+            driftScoreEl.innerText = driftScore.toFixed(2);
+        } else {
+            driftScoreEl.innerText = "–";
+        }
+    }
+
+    // New: AUC + Gini cards
+    const aucCardVal = document.getElementById("metric_auc_value");
+    const aucCardTag = document.getElementById("metric_auc_tag");
+    if (aucCardVal && aucCardTag) {
+        if (typeof auc === "number" && !isNaN(auc)) {
+            aucCardVal.innerText = auc.toFixed(3);
+            aucCardTag.innerText = classifyAuc(auc);
+        } else {
+            aucCardVal.innerText = "–";
+            aucCardTag.innerText = "-";
+        }
+    }
+
+    const giniCardVal = document.getElementById("metric_gini_value");
+    const giniCardTag = document.getElementById("metric_gini_tag");
+    if (giniCardVal && giniCardTag) {
+        if (typeof auc === "number" && !isNaN(auc)) {
+            let gini = 2 * auc - 1;        // standard Gini from AUC
+            if (gini < 0) gini = 0;
+            if (gini > 1) gini = 1;
+            giniCardVal.innerText = gini.toFixed(2);
+            giniCardTag.innerText = classifyGini(gini);
+        } else {
+            giniCardVal.innerText = "–";
+            giniCardTag.innerText = "-";
+        }
+    }
+
+    // New: legend state title ("Stable", "Monitor", "Drift")
+    const legendTitle = document.getElementById("drift_state_text");
+    if (legendTitle) {
+        const label = (m.drift_label || "").toUpperCase();
+        if (label === "MONITOR") legendTitle.innerText = "Monitor";
+        else if (label === "POSSIBLE_DRIFT" || label === "DRIFT") legendTitle.innerText = "Drift";
+        else legendTitle.innerText = "Stable";
+    }
+
+    updateDriftBadge();
+}
+
+
+async function loadMetrics() {
+    try {
+        const resp = await fetch("/admin/metrics");
+        if (!resp.ok) return;
+        const m = await resp.json();
+        applyMetricsToUI(m);
+    } catch (e) {
+        console.log("metrics load error", e);
+    }
+}
+
+async function retrainModel() {
+    const statusEl = document.getElementById("retrain_status");
+    statusEl.innerText = "Retraining in progress...";
+
+    try {
+        const resp = await fetch("/admin/retrain", { method: "POST" });
+        const data = await resp.json();
+
+        if (!resp.ok) {
+            statusEl.innerText = "Retraining failed: " + (data.detail || "Unknown error");
+            return;
+        }
+
+        statusEl.innerText = data.message || "Retraining complete.";
+        if (data.metrics) applyMetricsToUI(data.metrics);
+        loadHistoryPanel();
+    } catch (err) {
+        console.error("Retrain error:", err);
+        statusEl.innerText = "Error while retraining: " + err;
+    }
+}
+
+/* Drift badge */
+function updateDriftBadge() {
+    const badgeEl = document.getElementById("drift_badge");
+    if (!badgeEl) return;
+
+    const label = activeDriftLabel || "BASELINE";
+    let cls = "drift-pill drift-stable";
+    let text = "Stable data";
+
+    if (label === "MONITOR") {
+        cls = "drift-pill drift-monitor";
+        text = "Monitor drift";
+    } else if (label === "POSSIBLE_DRIFT") {
+        cls = "drift-pill drift-drift";
+        text = "Possible drift";
+    } else if (label === "BASELINE") {
+        text = "Baseline model";
+    }
+
+    badgeEl.innerHTML = `<span class="${cls}">${text}</span>`;
+}
+
+/* History + actions */
+async function loadHistoryPanel() {
+    try {
+        const resp = await fetch("/admin/model_history");
+        if (!resp.ok) return;
+        const data = await resp.json();
+        const history = data.history || [];
+
+        const tbody = document.getElementById("historyRows");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+
+        for (let i = 0; i < history.length; i++) {
+            const row = history[i];
+
+            const version = row.model_version || (i + 1).toString();
+            const aucRaw = typeof row.auc === "number" ? row.auc : parseFloat(row.auc);
+            const auc = isNaN(aucRaw) ? null : aucRaw;
+
+            const prevRaw =
+                i > 0
+                    ? (typeof history[i - 1].auc === "number"
+                        ? history[i - 1].auc
+                        : parseFloat(history[i - 1].auc))
+                    : null;
+            const prevAuc = isNaN(prevRaw) ? null : prevRaw;
+
+            let delta = null;
+            if (auc !== null && prevAuc !== null) delta = auc - prevAuc;
+
+            const tr = document.createElement("tr");
+            tr.style.borderTop = "1px solid #e5e7eb";
+
+            const isActive = (activeVersion && version === activeVersion);
+            if (isActive) tr.style.backgroundColor = "#ecfdf5";
+
+            let deltaStr = "–";
+            let deltaColor = "#6b7280";
+            if (delta !== null) {
+                deltaStr = (delta >= 0 ? "+" : "") + delta.toFixed(3);
+                deltaColor = delta >= 0 ? "#16a34a" : "#b91c1c";
+            }
+
+            const fullPath = row.model_file_path || "";
+            const parts = fullPath.split(/[\\/]/);
+            const fileName = parts[parts.length - 1] || "";
+
+            const activeStyles = isActive
+                ? "background: var(--emerald); color:#ffffff; border-color: var(--emerald-dark);"
+                : "";
+
+            tr.innerHTML = `
+                <td style="padding:4px 6px;">${i + 1}</td>
+                <td style="padding:4px 6px; font-family:monospace; font-size:11px;">${version}</td>
+                <td style="padding:4px 6px;">${row.trained_at || "-"}</td>
+                <td style="padding:4px 6px; text-align:right;">${auc !== null ? auc.toFixed(3) : "-"}</td>
+                <td style="padding:4px 6px; text-align:right; color:${deltaColor};">${deltaStr}</td>
+                <td style="padding:4px 6px; text-align:right; white-space:nowrap;">
+                    <button
+                        class="secondary-btn admin-action-btn"
+                        style="padding:3px 7px; font-size:11px; ${activeStyles}"
+                        onclick="deployModel('${version}')"
+                        ${isActive ? "disabled" : ""}
+                    >
+                        ${isActive ? "Active" : "Deploy"}
+                    </button>
+                    ${fileName ? `
+                        <button
+                            class="secondary-btn admin-action-btn"
+                            style="padding:3px 7px; font-size:11px; margin-left:4px;"
+                            onclick="downloadModel('${fileName}')"
+                        >
+                            Download
+                        </button>
+                    ` : ``}
+                    <button
+                        class="secondary-btn admin-action-btn"
+                        style="padding:3px 7px; font-size:11px; margin-left:4px;"
+                        onclick="deleteModel('${version}')"
+                    >
+                        Delete
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        // Update drift chart with the same history data
+        drawDriftChart(history);
+
+
+    } catch (err) {
+        console.log("history load error", err);
+    }
+}
+
+async function deployModel(version) {
+    if (!version) return;
+    if (!confirm("Deploy version " + version + " as the active model?")) return;
+
+    try {
+        const resp = await fetch("/admin/deploy_model?version=" + encodeURIComponent(version), {
+            method: "POST"
+        });
+        const data = await resp.json();
+
+        if (!resp.ok) {
+            alert("Deploy failed: " + (data.detail || "Unknown error"));
+            return;
+        }
+
+        loadMetrics();
+        loadHistoryPanel();
+    } catch (err) {
+        alert("Deploy error: " + err);
+    }
+}
+
+function downloadModel(fileName) {
+    if (!fileName) return;
+    window.location.href = "/admin/download_model?file=" + encodeURIComponent(fileName);
+}
+
+async function deleteModel(version) {
+    if (!version) return;
+    if (!confirm("Delete model version " + version + "? This cannot be undone.")) return;
+
+    try {
+        const resp = await fetch("/admin/delete_model?version=" + encodeURIComponent(version), {
+            method: "POST"
+        });
+        const data = await resp.json();
+
+        if (!resp.ok) {
+            alert("Delete failed: " + (data.detail || "Unknown error"));
+            return;
+        }
+
+        loadMetrics();
+        loadHistoryPanel();
+    } catch (err) {
+        alert("Delete error: " + err);
+    }
+}
+
+/* ------- Initial load + 5s auto-refresh ------- */
+document.addEventListener("DOMContentLoaded", () => {
+    loadMetrics();
+    loadHistoryPanel();
+    setInterval(() => {
+        loadMetrics();
+        loadHistoryPanel();
+    }, 5000);
+});
+</script>
+</body>
+</html>

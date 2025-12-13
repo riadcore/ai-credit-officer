@@ -1,0 +1,28 @@
+# --------------------
+# Python / Environment
+# --------------------
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# --------------------
+# Runtime data (Railway)
+# --------------------
+data/training/training_master.csv
+
+models/training_metrics.json
+models/model_train_log.jsonl
+
+# Keep folder, ignore heavy model binaries
+models/versions/*.pkl
+
+# SQLite runtime DB
+decisions.db
+
+# --------------------
+# OS / IDE
+# --------------------
+.DS_Store
+Thumbs.db
+.vscode/
