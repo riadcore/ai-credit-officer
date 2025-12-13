@@ -661,6 +661,29 @@ def health_check():
     }
 
 
+@app.get("/admin/active_model_info")
+def active_model_info():
+    p = Path(MODEL_PATH)
+    if not p.exists():
+        raise HTTPException(status_code=404, detail=f"Model path not found: {p}")
+
+    # hash first ~1MB to identify file quickly (fast & enough for checking changes)
+    import hashlib
+    h = hashlib.sha256()
+    with open(p, "rb") as f:
+        h.update(f.read(1024 * 1024))
+
+    return {
+        "MODEL_PATH": str(p),
+        "mtime_utc": datetime.datetime.utcfromtimestamp(p.stat().st_mtime).isoformat() + "Z",
+        "size_bytes": p.stat().st_size,
+        "sha256_1mb": h.hexdigest(),
+    }
+
+
+
+
+
 @app.get("/dashboard", response_class=HTMLResponse)
 def dashboard(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
@@ -802,12 +825,13 @@ UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 @app.post("/admin/upload_training_csv")
 async def upload_training_csv(file: UploadFile = File(...)):
-    """
-    Upload CSV for training and save under data/training directory.
-    Frontend sends multipart/form-data with key 'file'.
-    """
     try:
-        filename = file.filename or "training.csv"
+        import datetime
+
+        # ✅ NEW: timestamped filename to avoid retraining old data
+        stamp = datetime.datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        original = file.filename or "training.csv"
+        filename = f"{stamp}_{original}"
 
         if not filename.lower().endswith(".csv"):
             raise HTTPException(status_code=400, detail="Only CSV files allowed.")
@@ -823,6 +847,7 @@ async def upload_training_csv(file: UploadFile = File(...)):
             "path": str(save_path),
             "message": "Training CSV uploaded successfully.",
         }
+
     except HTTPException:
         raise
     except Exception as e:
