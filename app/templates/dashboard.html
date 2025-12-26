@@ -2087,7 +2087,7 @@ async function deployModel(version) {
 
 function downloadModel(fileName) {
     if (!fileName) return;
-    window.location.href = "/admin/download_model?file=" + encodeURIComponent(fileName);
+    window.location.href = "/admin/download_model?filename=" + encodeURIComponent(fileName);
 }
 
 async function deleteModel(version) {
