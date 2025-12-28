@@ -1335,7 +1335,7 @@ async function sendChat(){
     const msg = (input.value || "").trim();
     if(!msg) return;
 
-    const borrower_id = (el("borrower_id")?.value || "").trim();
+    const borrower_id = (CURRENT_BORROWER_ID || (el("borrower_id")?.value || "").trim() || null);
 
     addBubble("user", msg);
     input.value = "";
@@ -1343,6 +1343,7 @@ async function sendChat(){
     const payload = {
         message: msg,
         borrower_id: borrower_id || null,
+        decision_id: CURRENT_DECISION_ID || null,
         mode: "borrower",
         language: el("chatLang") ? el("chatLang").value : "en"
     };
@@ -1600,6 +1601,9 @@ async function scoreBorrower() {
         }
 
         const data = await resp.json();
+        // Keep the EXACT decision_id that produced the current SHAP chart
+        CURRENT_DECISION_ID = data.decision_id || data?.credit?.decision_id || null;
+        CURRENT_BORROWER_ID = data.borrower_id || payload.borrower_id || null;
         const credit = data.credit;
         __lastTopFactors = credit.top_factors || [];
         renderShapSuggested(credit.top_factors); // ✅ add this
