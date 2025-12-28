@@ -1346,12 +1346,16 @@ async function sendChat(){
     input.value = "";
 
     const payload = {
-        message: msg,
-        borrower_id: borrower_id || null,
-        decision_id: CURRENT_DECISION_ID || null,   // ✅ THIS is the key fix
-        mode: "borrower",
-        language: el("chatLang") ? el("chatLang").value : "en"
+    message: msg,
+    borrower_id: borrower_id || null,
+    decision_id: CURRENT_DECISION_ID || null,
+    mode: "borrower",
+    language: el("chatLang") ? el("chatLang").value : "en",
+
+    // ✅ critical: send the SAME top-factors % shown in SHAP card
+    display_top_factors: (__lastDisplayedTopFactors || []).slice(0, 3)
     };
+
 
     try{
         const r = await fetch("/chat", {
@@ -1395,6 +1399,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 let __shapMode = "borrower"; // borrower | auditor
 let __lastTopFactors = null;
+let __lastDisplayedTopFactors = null; // ✅ holds UI-normalized top factors (shown in card)
+
 
 function prettifyFeatureName(name){
   return String(name || "")
@@ -1442,6 +1448,18 @@ function renderShapSuggested(top_factors){
   items.forEach(x => {
     x.ui_pct = +(((Number(x.pct) || 0) / totalShown) * 100).toFixed(0);
   });
+
+
+  // ✅ Save exactly what the SHAP card is showing (UI-normalized %)
+  __lastDisplayedTopFactors = items.map(x => ({
+    feature: x.feature_raw,        // keep raw name for backend lookup/logging
+    feature_label: x.feature,      // pretty name for display
+    ui_pct: Number(x.ui_pct || 0), // EXACT % shown on the card
+    direction: x.direction || "",
+    detail: x.detail || ""
+  }));
+
+
 
  
   // 4) Render rows

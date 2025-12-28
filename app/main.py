@@ -31,7 +31,7 @@ import train_from_export  # training pipeline
 
 
 import re
-from typing import Optional
+from typing import Optional, List, Dict
 import httpx
 
 from dotenv import load_dotenv
@@ -237,6 +237,7 @@ class ChatRequest(BaseModel):
     decision_id: Optional[int] = None
     mode: str = "borrower"   # borrower | officer | auditor
     language: str = "en"     # en | bn
+    display_top_factors: Optional[List[Dict]] = None
 
 
 def _row_to_decision_dict(row: tuple) -> dict:
@@ -1462,6 +1463,17 @@ def is_followup_question(msg: str) -> bool:
     }
 
 
+def _is_top3_question(msg: str) -> bool:
+    t = (msg or "").lower()
+    triggers = [
+        "top 3", "top3", "three factors", "3 factors",
+        "which factors", "main factors",
+        "কোন ৩", "৩টা", "তিন", "ফ্যাক্টর", "কারণ"
+    ]
+    return any(x in t for x in triggers)
+
+
+
 # ============================================================
 # AI Credit Officer – Embedded Chat (Explainable & Grounded)
 # ============================================================
@@ -1477,8 +1489,28 @@ async def chat(req: ChatRequest):
         msg = (req.message or "").strip()
         if not msg:
             raise HTTPException(status_code=400, detail="message is required")
-        raw_user_msg = msg
+        
+        if req.display_top_factors and _is_top3_question(msg):
+            factors = req.display_top_factors[:3]
 
+            if (req.language or "en") == "bn":
+                lines = ["সিদ্ধান্তে সবচেয়ে বেশি প্রভাব ফেলেছে এমন ৩টি ফ্যাক্টর হলোঃ"]
+                for i, f in enumerate(factors, start=1):
+                    name = f.get("feature_label") or f.get("feature") or "Unknown"
+                    pct = f.get("ui_pct")
+                    lines.append(f"{i}. {name} — {pct}%")
+                return {"answer": "\n".join(lines)}
+
+            # English
+            lines = ["The top 3 factors that influenced the decision most are:"]
+            for i, f in enumerate(factors, start=1):
+                name = f.get("feature_label") or f.get("feature") or "Unknown"
+                pct = f.get("ui_pct")
+                lines.append(f"{i}. {name} — {pct}%")
+            return {"answer": "\n".join(lines)}
+                
+                
+        raw_user_msg = msg
 
 
         decision = None
