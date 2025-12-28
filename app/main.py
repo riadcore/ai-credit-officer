@@ -224,8 +224,13 @@ def init_chat_db():
         );
         """
     )
-    conn.commit()
+
+    decision_id = cur.lastrowid
+
+        conn.commit()
     conn.close()
+
+    return decision_id
 
 
 class ChatRequest(BaseModel):
@@ -502,7 +507,7 @@ def log_decision(
     top_factors: list[Factor],
     fraud_score: float,
     fraud_label: str,
-) -> None:
+) -> int:
     """Insert one decision row into SQLite ledger."""
     shap_factors_json = json.dumps([f.dict() for f in top_factors])
     created_at = datetime.datetime.utcnow().isoformat() + "Z"
@@ -1184,7 +1189,7 @@ def decision(req: CreditScoreRequest):
         fraud_score, fraud_label, flags = compute_fraud(req)
 
         # log to ExplainChain
-        log_decision(
+        decision_id = log_decision(
             req=req,
             risk_score=pd_default,
             decision=decision_label,
@@ -1195,8 +1200,10 @@ def decision(req: CreditScoreRequest):
         )
 
         return {
+            "decision_id": decision_id,
             "borrower_id": req.borrower_id,
             "credit": {
+                "decision_id": decision_id,
                 "risk_score": pd_default,
                 "decision": decision_label,
                 "explanation": explanation,
