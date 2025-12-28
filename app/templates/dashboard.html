@@ -1303,6 +1303,11 @@ Hi! Score a borrower first, then ask:
 </div>
 
 <script>
+
+
+let CURRENT_BORROWER_ID = null;
+let CURRENT_DECISION_ID = null;
+
 let activeVersion = null;
 let activeDriftLabel = null;
 
@@ -1335,7 +1340,7 @@ async function sendChat(){
     const msg = (input.value || "").trim();
     if(!msg) return;
 
-    const borrower_id = (el("borrower_id")?.value || "").trim();
+    const borrower_id = (CURRENT_BORROWER_ID || (el("borrower_id")?.value || "").trim() || null);
 
     addBubble("user", msg);
     input.value = "";
@@ -1343,6 +1348,7 @@ async function sendChat(){
     const payload = {
         message: msg,
         borrower_id: borrower_id || null,
+        decision_id: CURRENT_DECISION_ID || null,
         mode: "borrower",
         language: el("chatLang") ? el("chatLang").value : "en"
     };
@@ -1365,6 +1371,7 @@ async function sendChat(){
         addBubble("assistant", "Network error while chatting.");
     }
 }
+
 
 /* attach handlers once DOM is ready */
 document.addEventListener("DOMContentLoaded", () => {
@@ -1600,6 +1607,10 @@ async function scoreBorrower() {
         }
 
         const data = await resp.json();
+        CURRENT_DECISION_ID = data.decision_id || null;
+        CURRENT_BORROWER_ID = data.borrower_id || payload.borrower_id || null;
+
+
         const credit = data.credit;
         __lastTopFactors = credit.top_factors || [];
         renderShapSuggested(credit.top_factors); // ✅ add this
@@ -1688,6 +1699,11 @@ ${factorsText}
 }
 
 function restartForm() {
+
+    CURRENT_BORROWER_ID = null;
+    CURRENT_DECISION_ID = null;
+
+
     document.getElementById("borrower_id").value = "";
     document.getElementById("monthly_income").value = "";
     document.getElementById("monthly_expense").value = "";
