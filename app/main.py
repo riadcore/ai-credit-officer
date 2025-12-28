@@ -400,7 +400,7 @@ async def call_llm_openai_compatible(system_prompt: str, user_prompt: str) -> st
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ],
-        "temperature": 0.2,   # low = stable, explainable answers
+        "temperature": 0.0,   # low = stable, explainable answers
     }
 
     headers = {
