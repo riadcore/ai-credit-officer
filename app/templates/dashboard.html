@@ -385,790 +385,934 @@
             min-height: 90px;
         }
 
-        .fraud-box {
+        .mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 12px;
+        }
+
+        /* ==============================
+           SHAP section
+        ============================== */
+
+        .shap-wrap {
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .shap-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
             background: #f9fafb;
-            border-left: 4px solid #9ca3af;
-            border-radius: 10px;
-            padding: 8px 12px 10px;
-            margin-top: 10px;
-            font-size: 13px;
-            border-top: 1px solid #e5e7eb;
-            border-right: 1px solid #e5e7eb;
             border-bottom: 1px solid #e5e7eb;
         }
 
-        .fraud-flag {
-            display: block;
-            margin-top: 2px;
-        }
-
-        .badge-small {
-            display: inline-block;
-            padding: 2px 7px;
-            border-radius: 999px;
-            font-size: 11px;
-            background: #e5e7eb;
-            color: #111827;
-            margin-left: 6px;
-        }
-
-        .badge-fraud-normal {
-            background: var(--success-soft);
-            color: var(--success);
-        }
-
-        .badge-fraud-borderline {
-            background: #fef3c7; /* soft amber */
-            color: #92400e;
-        }
-
-        .badge-fraud-unusual {
-            background: var(--warning-soft);
-            color: var(--warning);
-        }
-
-        .badge-fraud-highly {
-            background: var(--danger-soft);
-            color: var(--danger);
-        }
-
-        .subtitle {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        #retrain_status {
-            font-size: 12px;
-            margin-top: 6px;
-            color: var(--text-muted);
-        }
-
-        .metrics-block {
-            margin-top: 10px;
-            padding: 8px 10px;
-            border-radius: 10px;
-            background: #f9fafb;
-            border: 1px dashed #d1d5db;
-            font-size: 12px;
-            color: #374151;
-            line-height: 1.5;
-        }
-
-        .metrics-block strong {
-            color: #111827;
-        }
-
-        .live-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 11px;
-            color: #16a34a;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 999px;
-            background: #22c55e;
-            box-shadow: 0 0 0 0 rgba(34,197,94,0.8);
-            animation: pulse 1.6s infinite;
-        }
-
-        @keyframes pulse {
-            0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.8); }
-            70%  { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
-            100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
-        }
-
-        .drift-pill {
-            padding: 2px 8px;
-            border-radius: 999px;
-            font-size: 11px;
-            font-weight: 500;
-        }
-
-        .drift-stable {
-            background: var(--success-soft);
-            color: var(--success);
-            border: 1px solid #bbf7d0;
-        }
-
-        .drift-monitor {
-            background: var(--warning-soft);
-            color: var(--warning);
-            border: 1px solid #fed7aa;
-        }
-
-        .drift-drift {
-            background: var(--danger-soft);
-            color: var(--danger);
-            border: 1px solid #fecaca;
-        }
-
-        /* ------- Model performance layout (drift + AUC + Gini) ------- */
-        .perf-top-layout {
-            display: flex;
-            gap: 14px;
-            align-items: stretch;
-            margin-bottom: 10px;
-        }
-
-        .drift-chart-shell {
-            flex: 1.7;
-            background: radial-gradient(circle at 50% 0%, #ffffff, #e5e7eb);
-            border-radius: 12px;
-            padding: 10px 12px 8px;
-            box-shadow:
-                inset 0 1px 2px rgba(255,255,255,0.7),
-                0 10px 24px rgba(15,23,42,0.12);
-        }
-
-        .drift-score-label {
-            font-size: 13px;
-            font-weight: 500;
-            color: #111827;
-            margin-bottom: 4px;
-        }
-
-        .drift-score-label span {
-            font-weight: 600;
-        }
-
-        .drift-legend-card {
-            flex: 1;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
-            padding: 10px 12px;
-            font-size: 12px;
-            color: #374151;
-            box-shadow: 0 10px 24px rgba(15,23,42,0.06);
-        }
-
-        .drift-legend-title {
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
-
-        .drift-legend-line {
-            margin-top: 2px;
-        }
-
-        .perf-bottom-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-            margin-bottom: 10px;
-            margin-top: 6px;
-        }
-
-        .perf-metric-block {
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            padding: 10px 12px;
-            background: #f9fafb;
-        }
-
-        .perf-metric-title {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 2px;
-            color: #0f172a;
-        }
-
-        .perf-metric-value {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-
-        .perf-metric-tag {
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .perf-metric-scale {
-            font-size: 11px;
-            color: #6b7280;
-        }
-
-        /* horizontal scroll wrapper for wide tables */
-        .table-scroll {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* make canvas responsive */
-        #driftChart {
-            width: 100%;
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* ==============================
-        SHAP Chart (left column)
-        ============================== */
-        #shapCanvas {
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-        }
-
-        /* ==============================
-           Embedded Chat Styles
-        ============================== */
-        .chat-header {
+        .shap-head-left {
             display: flex;
             flex-direction: column;
             gap: 2px;
-            margin-bottom: 10px;
-        }
-        .chat-title {
-            font-weight: 700;
-            font-size: 15px;
-            color: #0f172a;
-        }
-        .chat-subtitle {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        .chat-controls {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-        .chat-select {
-            padding: 6px 10px;
-            border-radius: 999px;
-            border: 1px solid #d1d5db;
-            background: #fff;
-            font-size: 12px;
-            color: #111827;
-            outline: none;
-        }
-        .chat-messages {
-            height: 220px;
-            overflow-y: auto;
-            padding: 10px;
-            border: 1px solid #eef2f7;
-            border-radius: 12px;
-            background: #fafbfc;
-        }
-        .chat-bubble {
-            max-width: 85%;
-            padding: 8px 10px;
-            border-radius: 12px;
-            margin: 6px 0;
-            white-space: pre-wrap;
-            line-height: 1.35;
-            font-size: 13px;
-            border: 1px solid #eef2f7;
-        }
-        .chat-bubble.user {
-            margin-left: auto;
-            background: #e8f0ff;
-            border-color: #dbe7ff;
-        }
-        .chat-bubble.assistant {
-            margin-right: auto;
-            background: #ffffff;
-            border-color: #eef2f7;
-        }
-        .chat-input-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .chat-input {
-            flex: 1;
-            padding: 10px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 12px;
-            outline: none;
-            font-size: 13px;
-        }
-        .chat-send-btn {
-            background: var(--accent);
-            color: #ffffff;
-            border-radius: 12px;
-            border: 1px solid var(--accent);
-            font-size: 13px;
-            padding: 9px 14px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.12s, transform 0.08s;
-        }
-        .chat-send-btn:hover {
-            background: #0b3a61;
-            transform: translateY(-1px);
-        }
-        .chat-hint {
-            margin-top: 8px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        .chat-mini-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .chat-chip {
-            border: 1px solid #d1d5db;
-            background: #ffffff;
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            cursor: pointer;
-            color: #0f172a;
-            transition: background 0.12s, border-color 0.12s;
-        }
-        .chat-chip:hover {
-            background: #f3f4f6;
-            border-color: #9ca3af;
         }
 
-        /* ------- Responsive tweaks ------- */
-        @media (max-width: 900px) {
-            .top-nav {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            .layout {
-                grid-template-columns: minmax(0, 1fr);
-            }
-            .page-wrapper {
-                padding: 0 12px 10px;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .nav-right {
-                flex-wrap: wrap;
-                row-gap: 6px;
-            }
-
-            .top-bar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .card {
-                padding: 14px 12px 16px;
-            }
-
-            .fields-grid {
-                grid-template-columns: minmax(0, 1fr);
-            }
-
-            .button-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .button-row button {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .perf-top-layout {
-                flex-direction: column;
-            }
-
-            .perf-bottom-grid {
-                grid-template-columns: minmax(0, 1fr);
-            }
-
-            .chat-input-row {
-                flex-direction: column;
-            }
-            .chat-send-btn {
-                width: 100%;
-            }
-        }
-
-        /* ===== SHAP rows UI ===== */
-        .shap-table {
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #fff;
-        }
-
-        .shap-table-header {
-            display: grid;
-            grid-template-columns: 1.4fr 1fr 1fr;
-            font-weight: 700;
-            font-size: 13px;
-            padding: 10px 12px;
-            background: #f3f4f6;
-            border-bottom: 1px solid #e5e7eb;
-            align-items: center;
-        }
-
-        .shap-row {
-            display: grid;
-            grid-template-columns: 1.4fr 1fr 1fr;
-            padding: 10px 12px;
-            border-bottom: 1px solid #eef2f7;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .shap-row:last-child {
-            border-bottom: none;
-        }
-
-        .shap-name {
+        .shap-title {
             font-size: 13px;
             font-weight: 600;
-            color: #111827;
+            color: #0f172a;
         }
 
-        .shap-bar-wrap {
-            background: #f3f4f6;
+        .shap-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .info-icon {
+            width: 28px;
+            height: 28px;
             border-radius: 999px;
-            height: 16px;
-            position: relative;
-            overflow: hidden;
             border: 1px solid #e5e7eb;
-        }
-
-        .shap-bar-fill {
-            height: 100%;
-            border-radius: 999px;
-        }
-
-        .shap-val {
-            font-size: 12px;
-            color: #374151;
-            text-align: left;
-            min-width: 44px;
+            background: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #334155;
+            cursor: default;
         }
 
         .shap-legend {
             display: flex;
-            gap: 14px;
             align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #ffffff;
             font-size: 12px;
-            color: #374151;
-            margin-bottom: 10px;
+            color: #111827;
         }
-        .dot {
+
+        .legend-dot {
             width: 10px;
             height: 10px;
             border-radius: 999px;
             display: inline-block;
             margin-right: 6px;
         }
-        .dot-green { background: #16a34a; }
-        .dot-red { background: #dc2626; }
+        .dot-green { background: #15803d; }
+        .dot-red   { background: #b91c1c; }
 
-        .info-pill {
+        .shap-table-head {
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr 1fr;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 12px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .shap-row {
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr 1fr;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+        }
+
+        .shap-row:last-child {
+            border-bottom: none;
+        }
+
+        .shap-feature {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .shap-pct {
+            color: #0f172a;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .shap-bar-bg {
+            position: relative;
+            height: 20px;
+            border-radius: 999px;
+            background: #f1f5f9;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+
+        .shap-bar {
+            position: absolute;
+            top: 3px;
+            bottom: 3px;
+            width: 10%;
+            border-radius: 999px;
+        }
+
+        .bar-green { background: #15803d; }
+        .bar-red   { background: #b91c1c; }
+
+        .shap-summary {
+            padding: 12px;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            font-size: 13px;
+            color: #0f172a;
+        }
+
+        .shap-summary small {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-muted);
+        }
+
+        /* ==============================
+           Embedded Chat
+        ============================== */
+
+        .chat-shell {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-top-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-lang {
+            border: 1px solid #d1d5db;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 12px;
+            background: #ffffff;
+            color: #0f172a;
+        }
+
+        .chat-box {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background: #ffffff;
+            height: 240px;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .chat-bubble {
+            max-width: 92%;
+            padding: 9px 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            line-height: 1.35;
+            white-space: pre-wrap;
+        }
+
+        .chat-bubble.user {
+            margin-left: auto;
+            background: #e0f2fe;
+            border: 1px solid #bfdbfe;
+            color: #0f172a;
+        }
+
+        .chat-bubble.assistant {
+            margin-right: auto;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            color: #0f172a;
+        }
+
+        .chat-quick {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            padding: 7px 10px;
+            border-radius: 999px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            cursor: pointer;
+            font-size: 12px;
+            color: #0f172a;
+            transition: background 0.12s;
+        }
+
+        .chip:hover {
+            background: #f3f4f6;
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input-row input {
+            flex: 1;
+            border-radius: 999px;
+            border: 1px solid #d1d5db;
+            padding: 10px 12px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .chat-input-row input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18);
+        }
+
+        .chat-send-btn {
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            background: var(--accent);
+            color: #ffffff;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.12s;
+        }
+
+        .chat-send-btn:hover {
+            background: #0b3a61;
+        }
+
+        /* ==============================
+           Right column cards
+        ============================== */
+
+        .mini-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .metric {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background: #ffffff;
+            padding: 12px;
+        }
+
+        .metric-title {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .metric-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+
+        .metric-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 12px;
-            color: #0f172a;
-            background: #f3f4f6;
+        }
+
+        .status-ok {
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .status-warn {
+            background: #fef3c7;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+
+        .status-bad {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .sparkline {
+            width: 100%;
+            height: 60px;
+            border-radius: 10px;
+            background: #f9fafb;
             border: 1px solid #e5e7eb;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            padding: 6px;
+            overflow: hidden;
+        }
+
+        .sparkbar {
+            flex: 1;
+            background: #94a3b8;
+            border-radius: 6px 6px 0 0;
+            min-width: 6px;
+        }
+
+        .model-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .model-table th, .model-table td {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 8px 6px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .model-table th {
+            color: #0f172a;
+            font-weight: 700;
+            background: #f9fafb;
+        }
+
+        .model-table td {
+            color: #0f172a;
+        }
+
+        .version-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        .active-dot {
+            width: 10px;
+            height: 10px;
             border-radius: 999px;
-            padding: 6px 10px;
+            background: #94a3b8;
+        }
+
+        .active-dot.on {
+            background: var(--emerald);
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.18);
+        }
+
+        .admin-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .file-input {
+            font-size: 12px;
+        }
+
+        @media (max-width: 980px) {
+            .layout { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 
 <body>
-<div class="shell">
-    <div class="top-nav">
-        <div class="nav-left">
-            <div class="nav-logo">AI</div>
-            <div class="nav-title">
-                <div class="nav-title-main">AI Credit Officer</div>
-                <div class="nav-title-sub">Explainable decisions • Compliance-ready</div>
+    <div class="shell">
+        <div class="top-nav">
+            <div class="nav-left">
+                <div class="nav-logo">A</div>
+                <div class="nav-title">
+                    <div class="nav-title-main">AI Credit Officer</div>
+                    <div class="nav-title-sub">Explainable decisions • Compliance-ready</div>
+                </div>
             </div>
-        </div>
-        <div class="nav-right">
-            <a class="nav-link active" href="/dashboard">Dashboard</a>
-            <a class="nav-link" href="/history">History</a>
-            <span class="badge-chip">Live</span>
-        </div>
-    </div>
-</div>
-
-<div class="page-wrapper">
-    <div class="top-bar">
-        <div class="top-left">
-            <h1>AI Credit Officer Dashboard</h1>
-            <p>Score a borrower, view explainable SHAP factors, and ask the chatbot why the decision happened.</p>
+            <div class="nav-right">
+                <a class="nav-link active" href="/dashboard">Dashboard</a>
+                <a class="nav-link" href="/history">History</a>
+                <span class="badge-chip">Live</span>
+            </div>
         </div>
     </div>
 
-    <div class="layout">
-
-        <!-- LEFT COLUMN -->
-        <div>
-            <div class="card">
-                <h2>Borrower Input</h2>
-                <div class="card-subtitle">Provide the borrower features and score the credit decision.</div>
-
-                <div class="fields-grid">
-                    <div class="field">
-                        <label>Borrower ID</label>
-                        <input id="borrower_id" value="B001" />
-                        <small>Used to lookup decision history</small>
-                    </div>
-
-                    <div class="field">
-                        <label>Monthly Income</label>
-                        <input id="monthly_income" type="number" value="50000" />
-                    </div>
-
-                    <div class="field">
-                        <label>Monthly Expense</label>
-                        <input id="monthly_expense" type="number" value="25000" />
-                    </div>
-
-                    <div class="field">
-                        <label>Age</label>
-                        <input id="age" type="number" value="30" />
-                    </div>
-
-                    <div class="field">
-                        <label>Has Smartphone?</label>
-                        <select id="has_smartphone">
-                            <option value="true" selected>Yes</option>
-                            <option value="false">No</option>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label>Has Mobile Wallet?</label>
-                        <select id="has_wallet">
-                            <option value="true" selected>Yes</option>
-                            <option value="false">No</option>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label>Avg Wallet Balance</label>
-                        <input id="avg_wallet_balance" type="number" value="3000" />
-                    </div>
-
-                    <div class="field">
-                        <label>On-Time Payment Ratio</label>
-                        <input id="on_time_payment_ratio" type="number" step="0.01" value="0.85" />
-                        <small>0.00 to 1.00</small>
-                    </div>
-
-                    <div class="field">
-                        <label>Num Loans Taken</label>
-                        <input id="num_loans_taken" type="number" value="2" />
-                    </div>
-                </div>
-
-                <div class="button-row">
-                    <button class="primary-btn" onclick="scoreBorrower()">Score Borrower</button>
-                    <button class="secondary-btn btn-restart" onclick="resetForm()">Restart</button>
-                </div>
-
-                <div id="error" class="error-text"></div>
-            </div>
-
-            <div class="card">
-                <h2>Result</h2>
-                <div class="card-subtitle">Decision + explanation (non-black-box)</div>
-
-                <div class="result-header">
-                    <div class="result-title">Decision Output</div>
-                    <div id="decision_badge"></div>
-                </div>
-
-                <div id="result_box" class="result-box">Score a borrower to see results.</div>
-
-                <div id="fraud_box" class="fraud-box">Fraud checks will appear here.</div>
-            </div>
-
-            <div class="card">
-                <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
-                    <div>
-                        <h2 style="margin:0;">SHapley Additive exPlanations (SHAP)</h2>
-                        <div class="card-subtitle">Relative contribution of each feature to the credit decision</div>
-                    </div>
-                    <div class="info-pill" title="Green decreases credit risk; Red increases credit risk.">
-                        <span style="font-weight:700;">i</span> Legend
-                    </div>
-                </div>
-
-                <div class="shap-legend">
-                    <span><span class="dot dot-green"></span>Decreases credit risk</span>
-                    <span><span class="dot dot-red"></span>Increases credit risk</span>
-                </div>
-
-                <div class="shap-table">
-                    <div class="shap-table-header">
-                        <div>What Affected the Credit Decision?</div>
-                        <div style="color:#15803d;">Decreases risk</div>
-                        <div style="color:#b91c1c;">Increases risk</div>
-                    </div>
-                    <div id="shapRows"></div>
-                </div>
-
-                <div id="shapSummary" class="metrics-block">
-                    Score a borrower to see top factors.
-                </div>
+    <div class="page-wrapper">
+        <div class="top-bar">
+            <div class="top-left">
+                <h1>AI Credit Officer Dashboard</h1>
+                <p>Score a borrower, view explainable SHAP factors, and ask the chatbot why the decision happened.</p>
             </div>
         </div>
 
-        <!-- RIGHT COLUMN -->
-        <div>
+        <div class="layout">
+            <!-- LEFT COLUMN -->
+            <div>
+                <div class="card">
+                    <h2>Borrower Input</h2>
+                    <div class="card-subtitle">Provide the borrower features and score the credit decision.</div>
 
-            <div class="card" id="chat_card">
-                <div class="chat-header">
-                    <div class="chat-title">AI Credit Officer Chat</div>
-                    <div class="chat-subtitle">Ask why the decision happened (grounded on ExplainChain + SHAP)</div>
+                    <div class="fields-grid">
+                        <div class="field">
+                            <label>Borrower ID</label>
+                            <input id="borrower_id" value="B001" />
+                        </div>
+
+                        <div class="field">
+                            <label>Monthly Income</label>
+                            <input id="monthly_income" type="number" value="50000" />
+                        </div>
+
+                        <div class="field">
+                            <label>Monthly Expense</label>
+                            <input id="monthly_expense" type="number" value="25000" />
+                        </div>
+
+                        <div class="field">
+                            <label>Age</label>
+                            <input id="age" type="number" value="30" />
+                        </div>
+
+                        <div class="field">
+                            <label>Has Smartphone?</label>
+                            <select id="has_smartphone">
+                                <option value="Yes" selected>Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Has Mobile Wallet?</label>
+                            <select id="has_mobile_wallet">
+                                <option value="Yes" selected>Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Avg Wallet Balance</label>
+                            <input id="avg_wallet_balance" type="number" value="3000" />
+                        </div>
+
+                        <div class="field">
+                            <label>On-Time Payment Ratio</label>
+                            <input id="on_time_payment_ratio" type="number" step="0.01" value="0.85" />
+                            <small>0.00 to 1.00</small>
+                        </div>
+
+                        <div class="field">
+                            <label>Num Loans Taken</label>
+                            <input id="num_loans_taken" type="number" value="2" />
+                        </div>
+                    </div>
+
+                    <div class="button-row">
+                        <button class="primary-btn" onclick="scoreBorrower()">Score Borrower</button>
+                        <button class="secondary-btn btn-restart" onclick="resetForm()">Restart</button>
+                    </div>
+
+                    <div id="inputError" class="error-text"></div>
                 </div>
 
-                <div class="chat-controls">
-                    <select id="chatLang" class="chat-select">
-                        <option value="en" selected>English</option>
-                        <option value="bn">বাংলা</option>
-                    </select>
-                </div>
+                <div class="card">
+                    <h2>Result</h2>
+                    <div class="card-subtitle">Decision + explanation (non-black-box).</div>
 
-                <div id="chatMessages" class="chat-messages">
-                    <div class="chat-bubble assistant">
-Ask why the decision happened.
-Score a borrower first, then ask:
-“Why did I get this decision?”
+                    <div class="result-header">
+                        <div class="result-title">Decision Output</div>
+                        <div id="decisionPill" class="decision-pill decision-review">—</div>
+                    </div>
+
+                    <div class="result-box" id="resultSummary">
+                        <div class="mono" id="resultText">Score a borrower to see the result.</div>
+                    </div>
+
+                    <div style="height:10px"></div>
+
+                    <div class="result-box" style="min-height:auto">
+                        <div class="mono"><b>Fraud Risk Score:</b> <span id="fraudScore">—</span> &nbsp; <span id="fraudLabel" class="badge-chip">—</span></div>
+                        <div class="mono"><b>Flags:</b> <span id="fraudFlags">—</span></div>
                     </div>
                 </div>
 
-                <div class="chat-hint">Pinned to Decision ID: <span id="chatDecisionId">—</span></div>
+                <div class="card">
+                    <h2>SHapley Additive exPlanations (SHAP)</h2>
+                    <div class="card-subtitle">Relative contribution of each feature to the credit decision.</div>
 
-                <div class="chat-mini-actions">
-                    <button class="chat-chip" onclick="quickAsk('Why this decision?')">Why this decision?</button>
-                    <button class="chat-chip" onclick="quickAsk('Which top 3 factors influenced the decision most?')">Top 3 factors</button>
-                    <button class="chat-chip" onclick="quickAsk('How can the borrower improve?')">How to improve?</button>
-                    <button class="chat-chip" onclick="quickAsk('Give an auditor summary.')">Auditor summary</button>
-                </div>
+                    <div class="shap-wrap">
+                        <div class="shap-head">
+                            <div class="shap-head-left">
+                                <div class="shap-title">Relative contribution of each feature to the credit decision</div>
+                                <div class="shap-subtitle">Green decreases credit risk, red increases credit risk.</div>
+                            </div>
+                            <div class="info-icon" title="These percentages are normalized across SHAP absolute impacts (global influence).">i</div>
+                        </div>
 
-                <div class="chat-input-row">
-                    <input id="chatInput" class="chat-input" placeholder="Type your question..." />
-                    <button id="chatSendBtn" class="chat-send-btn">Send</button>
+                        <div class="shap-legend">
+                            <span><span class="legend-dot dot-green"></span>Decreases credit risk</span>
+                            <span><span class="legend-dot dot-red"></span>Increases credit risk</span>
+                        </div>
+
+                        <div class="shap-table-head">
+                            <div>What Affected the Credit Decision?</div>
+                            <div style="text-align:left">Influence</div>
+                            <div style="text-align:left">Direction</div>
+                        </div>
+
+                        <div id="shapRows"></div>
+
+                        <div class="shap-summary" id="shapSummary">
+                            Score a borrower to see top factors.
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="card">
-                <h2>Model Performance</h2>
-                <div class="card-subtitle">Baseline vs deployed model health (drift + AUC + Gini)</div>
+            <!-- RIGHT COLUMN -->
+            <div>
+                <div class="card">
+                    <h2>AI Credit Officer Chat</h2>
+                    <div class="card-subtitle">Ask why the decision happened (grounded on ExplainChain + SHAP).</div>
 
-                <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px;">
-                    <div>
-                        <span class="badge-chip">Baseline model</span>
-                        <span class="live-indicator" style="margin-left:8px;"><span class="live-dot"></span>Live updating</span>
-                    </div>
-                    <div id="activeModelPill"></div>
-                </div>
+                    <div class="chat-shell">
+                        <div class="chat-top-row">
+                            <select id="chatLang" class="chat-lang">
+                                <option value="en" selected>English</option>
+                                <option value="bn">বাংলা</option>
+                            </select>
 
-                <div class="perf-top-layout">
-                    <div class="drift-chart-shell">
-                        <div class="drift-score-label">Drift score: <span id="driftScoreText">—</span></div>
-                        <canvas id="driftChart" width="520" height="180"></canvas>
-                    </div>
+                            <div class="badge-chip">Pinned to Decision ID: <span id="pinnedDecision" class="mono">—</span></div>
+                        </div>
 
-                    <div class="drift-legend-card">
-                        <div class="drift-legend-title">Stable</div>
-                        <div class="drift-legend-line">Stable (0.00–0.20)</div>
-                        <div class="drift-legend-line">Monitor (0.21–0.50)</div>
-                        <div class="drift-legend-line">Drift (0.51–1.00)</div>
-                    </div>
-                </div>
+                        <div class="chat-box" id="chatMessages"></div>
 
-                <div class="perf-bottom-grid">
-                    <div class="perf-metric-block">
-                        <div class="perf-metric-title">AUC</div>
-                        <div class="perf-metric-value" id="aucText">—</div>
-                        <div class="perf-metric-tag" id="aucTag">—</div>
-                        <div class="perf-metric-scale">POOR (0.50–0.60) · FAIR (0.61–0.70) · GOOD (0.71–1.00)</div>
-                    </div>
+                        <div class="chat-quick">
+                            <button class="chip" onclick="quickAsk('Why this decision?')">Why this decision?</button>
+                            <button class="chip" onclick="quickAsk('Top 3 factors')">Top 3 factors</button>
+                            <button class="chip" onclick="quickAsk('How to improve?')">How to improve?</button>
+                            <button class="chip" onclick="quickAsk('Auditor summary')">Auditor summary</button>
+                        </div>
 
-                    <div class="perf-metric-block">
-                        <div class="perf-metric-title">Gini</div>
-                        <div class="perf-metric-value" id="giniText">—</div>
-                        <div class="perf-metric-tag" id="giniTag">—</div>
-                        <div class="perf-metric-scale">LOW (0.00–0.30) · MEDIUM (0.31–0.50) · HIGH (0.51–1.00)</div>
+                        <div class="chat-input-row">
+                            <input id="chatInput" placeholder="Type your question..." onkeydown="if(event.key==='Enter'){sendChat();}" />
+                            <button class="chat-send-btn" onclick="sendChat()">Send</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="table-scroll">
-                    <table style="width:100%; border-collapse:collapse; font-size:12px;">
+                <div class="card">
+                    <h2>Model Performance</h2>
+                    <div class="card-subtitle">Quick snapshot of current production model quality.</div>
+
+                    <div class="mini-grid">
+                        <div class="metric">
+                            <div class="metric-title">AUC</div>
+                            <div class="metric-value" id="aucValue">—</div>
+                            <div class="metric-sub" id="aucBand">—</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-title">Gini</div>
+                            <div class="metric-value" id="giniValue">—</div>
+                            <div class="metric-sub" id="giniBand">—</div>
+                        </div>
+                    </div>
+
+                    <div style="height:10px"></div>
+
+                    <div class="metric">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <div class="metric-title">Drift score</div>
+                                <div class="metric-value" style="font-size:18px" id="driftValue">—</div>
+                            </div>
+                            <div id="driftPill" class="status-pill status-ok">● Live updating</div>
+                        </div>
+                        <div style="height:10px"></div>
+                        <div class="sparkline" id="driftSpark"></div>
+                        <div class="metric-sub" style="margin-top:8px">
+                            <b>Stable</b> (0.00–0.20) &nbsp; <b>Monitor</b> (0.21–0.50) &nbsp; <b>Drift</b> (0.51–1.00)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Model Maintenance (Admin)</h2>
+                    <div class="card-subtitle">Upload training CSV, retrain, deploy, download, or delete model versions.</div>
+
+                    <div class="admin-row">
+                        <input id="csvFile" class="file-input" type="file" accept=".csv" />
+                        <button class="secondary-btn btn-steel" onclick="uploadCSV()">Upload CSV</button>
+                        <button class="secondary-btn btn-steel" onclick="retrain()">Retrain</button>
+                    </div>
+
+                    <div id="adminMsg" class="error-text" style="color:#0f172a"></div>
+
+                    <table class="model-table" id="modelTable">
                         <thead>
-                        <tr style="background:#f3f4f6; text-align:left;">
-                            <th style="padding:8px 10px; border-bottom:1px solid #e5e7eb;">#</th>
-                            <th style="padding:8px 10px; border-bottom:1px solid #e5e7eb;">Version</th>
-                            <th style="padding:8px 10px; border-bottom:1px solid #e5e7eb;">Time</th>
-                            <th style="padding:8px 10px; border-bottom:1px solid #e5e7eb;">AUC</th>
-                        </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>Version</th>
+                                <th>Time</th>
+                                <th>AUC</th>
+                                <th>Active</th>
+                                <th style="text-align:right">Actions</th>
+                            </tr>
                         </thead>
-                        <tbody id="versionTableBody"></tbody>
+                        <tbody id="modelRows"></tbody>
                     </table>
                 </div>
             </div>
-
-            <div class="card">
-                <h2>Model Maintenance (Admin)</h2>
-                <div class="card-subtitle">Upload a new dataset and retrain the model bundle.</div>
-
-                <div class="button-row">
-                    <input type="file" id="csvFile" accept=".csv" />
-                    <button class="secondary-btn btn-steel" onclick="uploadCsv()">Upload CSV</button>
-                    <button class="secondary-btn btn-steel" onclick="retrainModel()">Retrain</button>
-                    <button class="secondary-btn admin-action-btn" id="deployBtn" onclick="deployActiveModel()" disabled>Deploy active</button>
-                    <button class="secondary-btn admin-action-btn" onclick="downloadActiveModel()">Download active</button>
-                    <button class="danger-btn" onclick="deleteActiveModel()">Delete active</button>
-                </div>
-
-                <div id="retrain_status"></div>
-            </div>
-
         </div>
     </div>
-</div>
 
 <script>
-let activeVersion = null;
-let activeDriftLabel = null;
-let CURRENT_BORROWER_ID = null;
+/* =========================================================
+   GLOBAL STATE (critical for SHAP ↔ Chat consistency)
+========================================================= */
 let CURRENT_DECISION_ID = null;
+let CURRENT_BORROWER_ID = null;
 
-let __lastTopFactors = [];
-
-/* ==============================
-   Embedded Chat (calls /chat)
-============================== */
+/* =========================================================
+   Helpers
+========================================================= */
 function el(id){ return document.getElementById(id); }
 
+function setDecisionPill(decision){
+    const pill = el("decisionPill");
+    pill.textContent = decision || "—";
+    pill.classList.remove("decision-approve","decision-review","decision-reject");
+
+    const d = (decision || "").toUpperCase();
+    if(d.includes("APPROVE")) pill.classList.add("decision-approve");
+    else if(d.includes("REJECT")) pill.classList.add("decision-reject");
+    else pill.classList.add("decision-review");
+}
+
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+function pct(n){
+    if(n === null || n === undefined || Number.isNaN(Number(n))) return "—";
+    return (Number(n) * 100).toFixed(0) + "%";
+}
+
+function safeText(x){
+    if(x === null || x === undefined) return "";
+    return String(x);
+}
+
+function bandAUC(auc){
+    const x = Number(auc);
+    if(Number.isNaN(x)) return "—";
+    if(x >= 0.71) return "GOOD (0.71–1.00)";
+    if(x >= 0.61) return "FAIR (0.61–0.70)";
+    if(x >= 0.50) return "POOR (0.50–0.60)";
+    return "WEAK (<0.50)";
+}
+
+function bandGini(g){
+    const x = Number(g);
+    if(Number.isNaN(x)) return "—";
+    if(x >= 0.51) return "HIGH (0.51–1.00)";
+    if(x >= 0.31) return "MEDIUM (0.31–0.50)";
+    return "LOW (0.00–0.30)";
+}
+
+function driftLabel(d){
+    const x = Number(d);
+    if(Number.isNaN(x)) return {cls:"status-ok", txt:"● Live updating"};
+    if(x <= 0.20) return {cls:"status-ok", txt:"● Stable"};
+    if(x <= 0.50) return {cls:"status-warn", txt:"● Monitor"};
+    return {cls:"status-bad", txt:"● Drift"};
+}
+
+function featureLabel(name){
+    const map = {
+        "on_time_payment_ratio": "On Time Payment Ratio",
+        "monthly_expense": "Monthly Expense",
+        "monthly_income": "Monthly Income",
+        "num_loans_taken": "Num Loans Taken",
+        "avg_wallet_balance": "Avg Wallet Balance",
+        "has_mobile_wallet": "Has Mobile Wallet?",
+        "has_smartphone": "Has Smartphone?",
+        "age": "Age"
+    };
+    return map[name] || name;
+}
+
+/* =========================================================
+   Score Borrower
+========================================================= */
+async function scoreBorrower(){
+    el("inputError").textContent = "";
+
+    const payload = {
+        borrower_id: (el("borrower_id").value || "").trim(),
+        monthly_income: Number(el("monthly_income").value),
+        monthly_expense: Number(el("monthly_expense").value),
+        age: Number(el("age").value),
+        has_smartphone: (el("has_smartphone").value || "Yes"),
+        has_mobile_wallet: (el("has_mobile_wallet").value || "Yes"),
+        avg_wallet_balance: Number(el("avg_wallet_balance").value),
+        on_time_payment_ratio: Number(el("on_time_payment_ratio").value),
+        num_loans_taken: Number(el("num_loans_taken").value)
+    };
+
+    if(!payload.borrower_id){
+        el("inputError").textContent = "Borrower ID is required.";
+        return;
+    }
+
+    try{
+        const r = await fetch("/decision", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify(payload)
+        });
+
+        const data = await r.json().catch(() => ({}));
+
+        if(!r.ok){
+            el("inputError").textContent = data.detail || "Failed to score borrower.";
+            return;
+        }
+
+        // ✅ PIN to SAME decision_id used by SHAP
+        CURRENT_DECISION_ID = data.decision_id || data.id || null;
+        CURRENT_BORROWER_ID = payload.borrower_id || null;
+        el("pinnedDecision").textContent = CURRENT_DECISION_ID ? String(CURRENT_DECISION_ID) : "—";
+
+        // Result UI
+        const decision = data.decision || data.result || "—";
+        setDecisionPill(decision);
+
+        const summary = data.summary || data.explanation || data.reason || "";
+        el("resultText").textContent = summary || "Decision computed.";
+
+        // Fraud
+        const fraud = data.fraud || {};
+        el("fraudScore").textContent = fraud.score !== undefined ? (Number(fraud.score).toFixed(0) + "%") : "—";
+        el("fraudLabel").textContent = fraud.label || "—";
+        el("fraudFlags").textContent = (fraud.flags && fraud.flags.length) ? fraud.flags.join(", ") : (fraud.flags || "None");
+
+        // SHAP rendering
+        renderSHAP(data.shap_factors || data.shap || []);
+
+        // Optional: greet chat with context
+        addBubble("assistant", "Decision pinned. Ask me why this decision happened (grounded on SHAP + stored facts).");
+
+    }catch(e){
+        el("inputError").textContent = "Network error while scoring.";
+    }
+}
+
+function resetForm(){
+    el("borrower_id").value = "B001";
+    el("monthly_income").value = 50000;
+    el("monthly_expense").value = 25000;
+    el("age").value = 30;
+    el("has_smartphone").value = "Yes";
+    el("has_mobile_wallet").value = "Yes";
+    el("avg_wallet_balance").value = 3000;
+    el("on_time_payment_ratio").value = 0.85;
+    el("num_loans_taken").value = 2;
+
+    CURRENT_DECISION_ID = null;
+    CURRENT_BORROWER_ID = null;
+    el("pinnedDecision").textContent = "—";
+
+    el("resultText").textContent = "Score a borrower to see the result.";
+    el("decisionPill").textContent = "—";
+    el("decisionPill").className = "decision-pill decision-review";
+    el("fraudScore").textContent = "—";
+    el("fraudLabel").textContent = "—";
+    el("fraudFlags").textContent = "—";
+
+    el("shapRows").innerHTML = "";
+    el("shapSummary").textContent = "Score a borrower to see top factors.";
+
+    el("chatMessages").innerHTML = "";
+}
+
+/* =========================================================
+   SHAP rendering (normalized % influence)
+========================================================= */
+function normalizeShapPercentages(shapList){
+    const arr = Array.isArray(shapList) ? shapList : [];
+    const total = arr.reduce((s, f) => s + Math.abs(Number(f.impact || f.shap || 0)), 0) || 1;
+
+    return arr.map(f => {
+        const impact = Math.abs(Number(f.impact || f.shap || 0));
+        return {
+            ...f,
+            pct_influence: Math.round((impact / total) * 100)
+        };
+    });
+}
+
+function renderSHAP(shapList){
+    const rows = el("shapRows");
+    rows.innerHTML = "";
+
+    const norm = normalizeShapPercentages(shapList)
+        .filter(f => f && (f.feature || f.name))
+        .sort((a,b) => (b.pct_influence||0) - (a.pct_influence||0))
+        .slice(0, 6);
+
+    if(!norm.length){
+        el("shapSummary").textContent = "No SHAP factors available for this decision.";
+        return;
+    }
+
+    norm.forEach(f => {
+        const feat = f.feature || f.name;
+        const label = featureLabel(feat);
+        const pctVal = clamp(Number(f.pct_influence || 0), 0, 100);
+
+        // direction by sign: negative = decreases risk, positive = increases risk
+        const rawImpact = Number(f.impact || f.shap || 0);
+        const isIncrease = rawImpact > 0;
+        const dirText = isIncrease ? "Increases risk" : "Decreases risk";
+
+        const row = document.createElement("div");
+        row.className = "shap-row";
+
+        const c1 = document.createElement("div");
+        c1.className = "shap-feature";
+        c1.textContent = label;
+
+        const c2 = document.createElement("div");
+        c2.className = "shap-pct";
+        c2.textContent = pctVal + "%";
+
+        const c3 = document.createElement("div");
+        const bg = document.createElement("div");
+        bg.className = "shap-bar-bg";
+
+        const bar = document.createElement("div");
+        bar.className = "shap-bar " + (isIncrease ? "bar-red" : "bar-green");
+        bar.style.width = clamp(pctVal, 2, 100) + "%";
+
+        bg.appendChild(bar);
+
+        const hint = document.createElement("div");
+        hint.style.fontSize = "11px";
+        hint.style.color = "#6b7280";
+        hint.style.marginTop = "4px";
+        hint.textContent = dirText;
+
+        c3.appendChild(bg);
+        c3.appendChild(hint);
+
+        row.appendChild(c1);
+        row.appendChild(c2);
+        row.appendChild(c3);
+        rows.appendChild(row);
+    });
+
+    // summary
+    const top = norm[0];
+    const topName = featureLabel(top.feature || top.name);
+    const topFeatRaw = (top.feature || top.name || "");
+    const topVal = (top.value !== undefined) ? top.value : "";
+    const topImpact = Number(top.impact || top.shap || 0);
+    const lowers = topImpact <= 0;
+
+    el("shapSummary").innerHTML =
+        `Overall, your most helpful factor was "<b>${topName}</b>".<br/>` +
+        `<span class="mono">${topFeatRaw}</span> with value <b>${safeText(topVal)}</b> ` +
+        (lowers ? "lowers" : "increases") + " the default risk." +
+        `<small>Percentages show each factor’s global influence among all SHAP factors (normalized absolute impact).</small>`;
+}
+
+/* =========================================================
+   Embedded Chat (calls /chat)
+========================================================= */
 function addBubble(role, text){
     const box = el("chatMessages");
     if (!box) return;
     const div = document.createElement("div");
-    div.className = "chat-bubble " + (role === "user" ? "user" : "assistant");
-    div.textContent = text || "";
+    div.className = "chat-bubble " + role;
+    div.textContent = text;
     box.appendChild(div);
     box.scrollTop = box.scrollHeight;
 }
 
 function quickAsk(text){
-    const input = el("chatInput");
-    if (!input) return;
-    input.value = text;
+    el("chatInput").value = text;
     sendChat();
 }
 
@@ -1179,7 +1323,6 @@ async function sendChat(){
     const msg = (input.value || "").trim();
     if(!msg) return;
 
-    // borrower_id is pinned after scoring; fallback to input field if needed
     const borrower_id = (CURRENT_BORROWER_ID || (el("borrower_id")?.value || "").trim() || null);
 
     addBubble("user", msg);
@@ -1188,7 +1331,7 @@ async function sendChat(){
     const payload = {
         message: msg,
         borrower_id: borrower_id || null,
-        decision_id: CURRENT_DECISION_ID || null,   // ✅ CRITICAL: pin chat to same decision as SHAP
+        decision_id: CURRENT_DECISION_ID || null,   // ✅ CRITICAL: keep SHAP & chat consistent
         mode: "borrower",
         language: el("chatLang") ? el("chatLang").value : "en"
     };
@@ -1212,452 +1355,201 @@ async function sendChat(){
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const sendBtn = el("chatSendBtn");
-    const chatInput = el("chatInput");
-    if(sendBtn) sendBtn.addEventListener("click", sendChat);
-    if(chatInput){
-        chatInput.addEventListener("keydown", (e) => {
-            if(e.key === "Enter"){
-                e.preventDefault();
-                sendChat();
-            }
-        });
+/* =========================================================
+   Model Performance (admin metrics)
+========================================================= */
+function renderSparkline(values){
+    const box = el("driftSpark");
+    box.innerHTML = "";
+    const arr = Array.isArray(values) ? values.slice(-24) : [];
+    if(!arr.length){
+        for(let i=0;i<12;i++){
+            const b = document.createElement("div");
+            b.className = "sparkbar";
+            b.style.height = "12px";
+            box.appendChild(b);
+        }
+        return;
     }
-});
 
-
-/* ==============================
-   SHAP renderer
-============================== */
-function prettyFeatureName(name){
-  const map = {
-    "on_time_payment_ratio": "On Time Payment Ratio",
-    "monthly_expense": "Monthly Expense",
-    "num_loans_taken": "Num Loans Taken",
-    "monthly_income": "Monthly Income",
-    "avg_wallet_balance": "Avg Wallet Balance",
-    "age": "Age",
-    "has_wallet": "Has Wallet",
-    "has_smartphone": "Has Smartphone"
-  };
-  return map[name] || (name || "").replaceAll("_", " ").replace(/\b\w/g, c => c.toUpperCase());
+    const maxV = Math.max(...arr.map(v => Number(v)||0), 1);
+    arr.forEach(v => {
+        const h = clamp((Number(v)||0) / maxV, 0, 1);
+        const b = document.createElement("div");
+        b.className = "sparkbar";
+        b.style.height = clamp(Math.round(h * 52), 6, 56) + "px";
+        box.appendChild(b);
+    });
 }
 
-function renderShapSuggested(top_factors){
-  __lastTopFactors = top_factors || [];
+async function loadMetrics(){
+    try{
+        const r = await fetch("/admin/metrics");
+        const data = await r.json().catch(() => ({}));
+        if(!r.ok) return;
 
-  const rowsEl = document.getElementById("shapRows");
-  const summaryEl = document.getElementById("shapSummary");
-  if(!rowsEl || !summaryEl) return;
+        const auc = data.auc;
+        const gini = data.gini;
+        const drift = data.drift_score;
 
-  // Build items
-  let items = (top_factors || []).map(f => ({
-    feature: f.feature || f.name || "unknown_feature",
-    value: f.value,
-    impact: Number(f.impact || 0),
-    pct: (f.pct_influence != null ? Number(f.pct_influence) : null),
-  }));
+        el("aucValue").textContent = (auc !== undefined && auc !== null) ? Number(auc).toFixed(3) : "—";
+        el("aucBand").textContent = bandAUC(auc);
 
-  // If pct missing, compute pct from abs impacts
-  const absSum = items.reduce((s,it)=>s+Math.abs(it.impact),0) || 1;
-  items = items.map(it => ({
-    ...it,
-    pct: (it.pct != null ? it.pct : (Math.abs(it.impact)/absSum*100))
-  }));
+        el("giniValue").textContent = (gini !== undefined && gini !== null) ? Number(gini).toFixed(2) : "—";
+        el("giniBand").textContent = bandGini(gini);
 
-  // Sort by pct desc
-  items.sort((a,b)=>b.pct - a.pct);
+        el("driftValue").textContent = (drift !== undefined && drift !== null) ? Number(drift).toFixed(2) : "—";
 
-  // Render rows
-  rowsEl.innerHTML = "";
-  items.forEach(it => {
-    const good = it.impact < 0;
-    const pctText = `${Math.round(it.pct)}%`;
-    const barPct = Math.max(0, Math.min(100, it.pct));
+        const pill = driftLabel(drift);
+        const dp = el("driftPill");
+        dp.className = "status-pill " + pill.cls;
+        dp.textContent = pill.txt;
 
-    const row = document.createElement("div");
-    row.className = "shap-row";
-
-    const name = document.createElement("div");
-    name.className = "shap-name";
-    name.textContent = prettyFeatureName(it.feature);
-
-    const decWrap = document.createElement("div");
-    const incWrap = document.createElement("div");
-
-    const makeBar = (fillPct, color) => {
-      const wrap = document.createElement("div");
-      wrap.className = "shap-bar-wrap";
-      const fill = document.createElement("div");
-      fill.className = "shap-bar-fill";
-      fill.style.width = `${fillPct}%`;
-      fill.style.background = color;
-      wrap.appendChild(fill);
-      return wrap;
-    };
-
-    // green for decreases, red for increases
-    if(good){
-      decWrap.appendChild(makeBar(barPct, "#16a34a"));
-      incWrap.appendChild(makeBar(0, "#dc2626"));
-    }else{
-      decWrap.appendChild(makeBar(0, "#16a34a"));
-      incWrap.appendChild(makeBar(barPct, "#dc2626"));
-    }
-
-    // add pct label at left of bar area (inside decrease column)
-    const label = document.createElement("div");
-    label.className = "shap-val";
-    label.textContent = pctText;
-
-    // place label next to the bar: easiest is prepend into dec/inc wrap depending on sign
-    if(good){
-      const holder = document.createElement("div");
-      holder.style.display = "flex";
-      holder.style.alignItems = "center";
-      holder.style.gap = "10px";
-      holder.appendChild(label);
-      holder.appendChild(decWrap.firstChild);
-      decWrap.innerHTML = "";
-      decWrap.appendChild(holder);
-    }else{
-      const holder = document.createElement("div");
-      holder.style.display = "flex";
-      holder.style.alignItems = "center";
-      holder.style.gap = "10px";
-      holder.appendChild(label);
-      holder.appendChild(incWrap.firstChild);
-      incWrap.innerHTML = "";
-      incWrap.appendChild(holder);
-    }
-
-    row.appendChild(name);
-    row.appendChild(decWrap);
-    row.appendChild(incWrap);
-    rowsEl.appendChild(row);
-  });
-
-  const best = items[0];
-  if(!best){
-    summaryEl.textContent = "No SHAP factors available.";
-    return;
-  }
-
-  const bestName = prettyFeatureName(best.feature);
-  const bestVal = (best.value != null ? String(best.value) : "N/A");
-  const bestDir = (best.impact < 0 ? "lowers" : "increases");
-  summaryEl.innerHTML = `<strong>Overall</strong>, your most influential factor was <strong>"${bestName}"</strong>.<br>${best.feature} with value <strong>${bestVal}</strong> ${bestDir} the default risk.`;
+        renderSparkline(data.drift_series || []);
+    }catch(e){}
 }
 
+/* =========================================================
+   Model Maintenance (admin actions)
+========================================================= */
+function setAdminMsg(text, isError=false){
+    const box = el("adminMsg");
+    box.style.color = isError ? "#b91c1c" : "#0f172a";
+    box.textContent = text || "";
+}
 
-/* ==============================
-   Score Borrower (/decision)
-============================== */
-async function scoreBorrower() {
-    const errEl = el("error");
-    if(errEl) errEl.innerText = "";
+async function loadModelHistory(){
+    try{
+        const r = await fetch("/admin/model_history");
+        const data = await r.json().catch(() => ({}));
+        if(!r.ok) return;
 
-    el("result_box").innerText = "Scoring borrower...";
-    el("fraud_box").innerText = "Checking fraud risk...";
-    el("decision_badge").innerHTML = "";
+        const rows = el("modelRows");
+        rows.innerHTML = "";
 
-    const payload = {
-        borrower_id: el("borrower_id").value,
-        monthly_income: parseFloat(el("monthly_income").value),
-        monthly_expense: parseFloat(el("monthly_expense").value),
-        age: parseInt(el("age").value),
-        has_smartphone: el("has_smartphone").value === "true",
-        has_wallet: el("has_wallet").value === "true",
-        avg_wallet_balance: parseFloat(el("avg_wallet_balance").value),
-        on_time_payment_ratio: parseFloat(el("on_time_payment_ratio").value),
-        num_loans_taken: parseInt(el("num_loans_taken").value)
-    };
+        const list = data.models || data.history || [];
+        const active = data.active_version || data.active || null;
 
-    try {
-        const resp = await fetch("/decision", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+        list.forEach((m, idx) => {
+            const tr = document.createElement("tr");
+
+            const version = m.version || m.name || "—";
+            const ts = m.timestamp || m.time || "—";
+            const auc = (m.auc !== undefined && m.auc !== null) ? Number(m.auc).toFixed(3) : "—";
+
+            const isActive = (active && String(active) === String(version)) || m.active === true;
+
+            tr.innerHTML = `
+                <td>${idx+1}</td>
+                <td><span class="version-tag"><span class="active-dot ${isActive?'on':''}"></span>${version}</span></td>
+                <td class="mono">${ts}</td>
+                <td>${auc}</td>
+                <td>${isActive ? '<span class="badge-chip" style="background:#dcfce7;color:#15803d;border-color:#bbf7d0;">Active</span>' : '<span class="badge-chip">—</span>'}</td>
+                <td style="text-align:right; white-space:nowrap;">
+                    <button class="secondary-btn admin-action-btn" onclick="deployModel('${version}')" ${isActive?'disabled':''}>Deploy</button>
+                    <button class="secondary-btn admin-action-btn" onclick="downloadModel('${version}')">Download</button>
+                    <button class="danger-btn" onclick="deleteModel('${version}')" ${isActive?'disabled':''}>Delete</button>
+                </td>
+            `;
+            rows.appendChild(tr);
         });
+    }catch(e){}
+}
 
-        if (!resp.ok) {
-            const text = await resp.text();
-            if(errEl) errEl.innerText = "Error: " + text;
-            el("result_box").innerText = "Failed.";
-            el("fraud_box").innerText = "Failed.";
+async function uploadCSV(){
+    const f = el("csvFile").files[0];
+    if(!f){
+        setAdminMsg("Please select a CSV file first.", true);
+        return;
+    }
+
+    setAdminMsg("Uploading CSV...");
+    const fd = new FormData();
+    fd.append("file", f);
+
+    try{
+        const r = await fetch("/admin/upload_training_csv", { method:"POST", body: fd });
+        const data = await r.json().catch(() => ({}));
+        if(!r.ok){
+            setAdminMsg(data.detail || "Upload failed.", true);
             return;
         }
+        setAdminMsg("CSV uploaded successfully.");
+    }catch(e){
+        setAdminMsg("Network error during upload.", true);
+    }
+}
 
-        const data = await resp.json();
-
-        // ✅ CRITICAL: pin to EXACT decision that generated SHAP
-        CURRENT_DECISION_ID = data.decision_id || data?.credit?.decision_id || null;
-        CURRENT_BORROWER_ID = data.borrower_id || payload.borrower_id || null;
-
-        const didEl = document.getElementById("chatDecisionId");
-        if (didEl) didEl.textContent = (CURRENT_DECISION_ID != null ? String(CURRENT_DECISION_ID) : "—");
-
-        const credit = data.credit;
-        __lastTopFactors = credit.top_factors || [];
-        renderShapSuggested(credit.top_factors);
-
-        const fraud = data.fraud;
-
-        const riskPct = (credit.risk_score * 100).toFixed(1);
-
-        let badgeClass = "decision-review";
-        if(credit.decision === "APPROVE") badgeClass = "decision-approve";
-        else if(credit.decision === "REJECT") badgeClass = "decision-reject";
-
-        el("decision_badge").innerHTML = `<span class="decision-pill ${badgeClass}">${credit.decision}</span>`;
-        el("result_box").innerText = credit.explanation || "(no explanation)";
-
-        // Fraud box
-        const fraudPct = Math.round((fraud.fraud_score || 0) * 100);
-        let fraudBadgeClass = "badge-fraud-normal";
-        if (fraud.risk_label === "HIGHLY_ANOMALOUS") fraudBadgeClass = "badge-fraud-highly";
-        else if (fraud.risk_label === "UNUSUAL") fraudBadgeClass = "badge-fraud-unusual";
-        else if (fraud.risk_label === "BORDERLINE") fraudBadgeClass = "badge-fraud-borderline";
-
-        let fraudText = `
-<b>Fraud Risk Score:</b> ${fraudPct}%
-<span class="badge-small ${fraudBadgeClass}">${fraud.risk_label}</span><br><br>
-`;
-
-        if (fraud.flags && fraud.flags.length) {
-            fraudText += `<b>Flags:</b><br>` + fraud.flags.map(f => `• ${f}`).join("<br>");
-        } else {
-            fraudText += `<b>Flags:</b> None`;
+async function retrain(){
+    setAdminMsg("Retraining model... (this may take a moment)");
+    try{
+        const r = await fetch("/admin/retrain", { method:"POST" });
+        const data = await r.json().catch(() => ({}));
+        if(!r.ok){
+            setAdminMsg(data.detail || "Retrain failed.", true);
+            return;
         }
-
-        el("fraud_box").innerHTML = fraudText;
-
-    } catch (e) {
-        if(errEl) errEl.innerText = "Network error: " + e;
-        el("result_box").innerText = "Failed.";
-        el("fraud_box").innerText = "Failed.";
+        setAdminMsg("Retrain completed. New model version created.");
+        await loadModelHistory();
+        await loadMetrics();
+    }catch(e){
+        setAdminMsg("Network error during retrain.", true);
     }
 }
 
-function resetForm(){
-  // reset pinned ids
-  CURRENT_BORROWER_ID = null;
-  CURRENT_DECISION_ID = null;
-  const didEl = document.getElementById("chatDecisionId");
-  if (didEl) didEl.textContent = "—";
-
-  const errEl = el("error");
-  if(errEl) errEl.innerText = "";
-
-  el("result_box").innerText = "Score a borrower to see results.";
-  el("fraud_box").innerText = "Fraud checks will appear here.";
-  el("decision_badge").innerHTML = "";
-
-  // clear SHAP rows + summary
-  const rowsEl = document.getElementById("shapRows");
-  const summaryEl = document.getElementById("shapSummary");
-  if(rowsEl) rowsEl.innerHTML = "";
-  if(summaryEl) summaryEl.textContent = "Score a borrower to see top factors.";
-}
-
-
-/* ==============================
-   Model Performance + Admin
-============================== */
-function driftLabelFromScore(drift){
-    if(drift <= 0.20) return "STABLE";
-    if(drift <= 0.50) return "MONITOR";
-    return "DRIFT";
-}
-
-function driftPillClass(label){
-    if(label === "STABLE") return "drift-stable";
-    if(label === "MONITOR") return "drift-monitor";
-    return "drift-drift";
-}
-
-function aucTag(auc){
-    if(auc < 0.61) return "POOR";
-    if(auc < 0.71) return "FAIR";
-    return "GOOD";
-}
-
-function giniTag(gini){
-    if(gini < 0.31) return "LOW";
-    if(gini < 0.51) return "MEDIUM";
-    return "HIGH";
-}
-
-async function fetchMetrics(){
-    const r = await fetch("/metrics");
-    if(!r.ok) return null;
-    return await r.json();
-}
-
-async function fetchModelHistory(){
-    const r = await fetch("/model_history");
-    if(!r.ok) return [];
-    const data = await r.json();
-    return data.items || [];
-}
-
-function drawDriftChart(canvasId, values){
-    const c = document.getElementById(canvasId);
-    if(!c) return;
-    const ctx = c.getContext("2d");
-    const w = c.width, h = c.height;
-    ctx.clearRect(0,0,w,h);
-
-    // axes
-    ctx.strokeStyle = "#d1d5db";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(30, 10);
-    ctx.lineTo(30, h-20);
-    ctx.lineTo(w-10, h-20);
-    ctx.stroke();
-
-    if(!values || !values.length) return;
-
-    const maxV = 1.0;
-    const minV = 0.0;
-
-    const x0 = 30, y0 = h-20, x1 = w-10, y1 = 10;
-    const dx = (x1-x0) / Math.max(1, values.length-1);
-
-    ctx.strokeStyle = "#0f4c81";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    values.forEach((v,i)=>{
-        const x = x0 + i*dx;
-        const y = y0 - ((v-minV)/(maxV-minV))*(y0-y1);
-        if(i===0) ctx.moveTo(x,y);
-        else ctx.lineTo(x,y);
-    });
-    ctx.stroke();
-}
-
-async function refreshPerformance(){
-    const m = await fetchMetrics();
-    if(m){
-        const drift = Number(m.drift_score ?? 0);
-        const auc = Number(m.auc ?? 0);
-        const gini = Number(m.gini ?? 0);
-        const label = driftLabelFromScore(drift);
-        activeDriftLabel = label;
-
-        const driftScoreText = document.getElementById("driftScoreText");
-        if(driftScoreText) driftScoreText.textContent = drift.toFixed(2);
-
-        const aucEl = document.getElementById("aucText");
-        const aucTagEl = document.getElementById("aucTag");
-        if(aucEl) aucEl.textContent = auc.toFixed(3);
-        if(aucTagEl) aucTagEl.textContent = aucTag(auc);
-
-        const giniEl = document.getElementById("giniText");
-        const giniTagEl = document.getElementById("giniTag");
-        if(giniEl) giniEl.textContent = gini.toFixed(2);
-        if(giniTagEl) giniTagEl.textContent = giniTag(gini);
-
-        drawDriftChart("driftChart", m.drift_series || []);
-    }
-
-    const history = await fetchModelHistory();
-    const tbody = document.getElementById("versionTableBody");
-    if(tbody){
-        tbody.innerHTML = "";
-        history.forEach((it, idx) => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td style="padding:8px 10px; border-bottom:1px solid #eef2f7;">${idx+1}</td>
-                <td style="padding:8px 10px; border-bottom:1px solid #eef2f7;">${it.version || "-"}</td>
-                <td style="padding:8px 10px; border-bottom:1px solid #eef2f7;">${it.timestamp || "-"}</td>
-                <td style="padding:8px 10px; border-bottom:1px solid #eef2f7;">${(it.auc != null ? Number(it.auc).toFixed(3) : "-")}</td>
-            `;
-            tbody.appendChild(tr);
-        });
+async function deployModel(version){
+    setAdminMsg(`Deploying ${version}...`);
+    try{
+        const r = await fetch(`/admin/deploy_model?version=${encodeURIComponent(version)}`, { method:"POST" });
+        const data = await r.json().catch(() => ({}));
+        if(!r.ok){
+            setAdminMsg(data.detail || "Deploy failed.", true);
+            return;
+        }
+        setAdminMsg(`Deployed ${version}.`);
+        await loadModelHistory();
+        await loadMetrics();
+    }catch(e){
+        setAdminMsg("Network error during deploy.", true);
     }
 }
 
-async function uploadCsv(){
-    const fileInput = document.getElementById("csvFile");
-    const status = document.getElementById("retrain_status");
-    if(!fileInput || !fileInput.files || !fileInput.files[0]){
-        if(status) status.textContent = "Please choose a CSV file first.";
-        return;
-    }
-
-    const form = new FormData();
-    form.append("file", fileInput.files[0]);
-
-    if(status) status.textContent = "Uploading...";
-    const r = await fetch("/upload_csv", { method:"POST", body: form });
-    const data = await r.json().catch(()=> ({}));
-    if(!r.ok){
-        if(status) status.textContent = (data.detail || "Upload failed.");
-        return;
-    }
-    if(status) status.textContent = "Upload complete.";
+function downloadModel(version){
+    // If your backend returns a download URL, you can use it.
+    // If it streams a file, this will work too:
+    window.location.href = `/admin/download_model?version=${encodeURIComponent(version)}`;
 }
 
-async function retrainModel(){
-    const status = document.getElementById("retrain_status");
-    if(status) status.textContent = "Retraining...";
-    const r = await fetch("/retrain", { method:"POST" });
-    const data = await r.json().catch(()=> ({}));
-    if(!r.ok){
-        if(status) status.textContent = (data.detail || "Retrain failed.");
-        return;
+async function deleteModel(version){
+    if(!confirm(`Delete model version ${version}?`)) return;
+    setAdminMsg(`Deleting ${version}...`);
+    try{
+        const r = await fetch(`/admin/delete_model?version=${encodeURIComponent(version)}`, { method:"POST" });
+        const data = await r.json().catch(() => ({}));
+        if(!r.ok){
+            setAdminMsg(data.detail || "Delete failed.", true);
+            return;
+        }
+        setAdminMsg(`Deleted ${version}.`);
+        await loadModelHistory();
+    }catch(e){
+        setAdminMsg("Network error during delete.", true);
     }
-    activeVersion = data.active_version || null;
-    if(status) status.textContent = "Retrain complete.";
-    const deployBtn = document.getElementById("deployBtn");
-    if(deployBtn) deployBtn.disabled = !activeVersion;
-    refreshPerformance();
 }
 
-async function deployActiveModel(){
-    const status = document.getElementById("retrain_status");
-    if(!activeVersion){
-        if(status) status.textContent = "No active version to deploy.";
-        return;
-    }
-    if(status) status.textContent = "Deploying...";
-    const r = await fetch("/deploy_active", { method:"POST" });
-    const data = await r.json().catch(()=> ({}));
-    if(!r.ok){
-        if(status) status.textContent = (data.detail || "Deploy failed.");
-        return;
-    }
-    if(status) status.textContent = "Deployed.";
-    refreshPerformance();
-}
+/* =========================================================
+   Init
+========================================================= */
+(async function init(){
+    // Initial load
+    addBubble("assistant", "Hi! Score a borrower first. Then ask me questions grounded on the pinned decision.");
 
-async function downloadActiveModel(){
-    window.location.href = "/download_active";
-}
+    await loadMetrics();
+    await loadModelHistory();
 
-async function deleteActiveModel(){
-    const status = document.getElementById("retrain_status");
-    if(!confirm("Delete active model bundle?")) return;
-    if(status) status.textContent = "Deleting...";
-    const r = await fetch("/delete_active", { method:"DELETE" });
-    const data = await r.json().catch(()=> ({}));
-    if(!r.ok){
-        if(status) status.textContent = (data.detail || "Delete failed.");
-        return;
-    }
-    if(status) status.textContent = "Deleted.";
-    activeVersion = null;
-    const deployBtn = document.getElementById("deployBtn");
-    if(deployBtn) deployBtn.disabled = true;
-    refreshPerformance();
-}
-
-// Auto refresh performance
-setInterval(refreshPerformance, 5000);
-refreshPerformance();
+    // Refresh metrics periodically (optional)
+    setInterval(loadMetrics, 10000);
+})();
 </script>
 
 </body>
