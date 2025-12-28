@@ -506,7 +506,7 @@ def log_decision(
     fraud_score: float,
     fraud_label: str,
 ) -> int:
-    """Insert one decision row into SQLite ledger."""
+    """Insert one decision row into SQLite ledger and return inserted decision_id."""
     shap_factors_json = json.dumps([f.dict() for f in top_factors])
     created_at = datetime.datetime.utcnow().isoformat() + "Z"
 
@@ -553,8 +553,11 @@ def log_decision(
             created_at,
         ),
     )
+
+    decision_id = cur.lastrowid  # ✅ IMPORTANT
     conn.commit()
     conn.close()
+    return int(decision_id)
 
 
 def fetch_recent_decisions(limit: int = 50) -> list[dict]:
@@ -1181,12 +1184,13 @@ def decision(req: CreditScoreRequest):
     - Computes credit score + SHAP explanations
     - Computes fraud score + flags
     - Logs everything into SQLite ExplainChain ledger
+    - ✅ Returns decision_id so chat can be pinned to the same decision
     """
     try:
         pd_default, decision_label, explanation, top_factors = compute_credit(req)
         fraud_score, fraud_label, flags = compute_fraud(req)
 
-        # log to ExplainChain
+        # ✅ log to ExplainChain and capture inserted id
         decision_id = log_decision(
             req=req,
             risk_score=pd_default,
@@ -1198,10 +1202,9 @@ def decision(req: CreditScoreRequest):
         )
 
         return {
-            "decision_id": decision_id,
+            "decision_id": decision_id,   # ✅ ADD THIS
             "borrower_id": req.borrower_id,
             "credit": {
-                "decision_id": decision_id,
                 "risk_score": pd_default,
                 "decision": decision_label,
                 "explanation": explanation,
@@ -1215,12 +1218,9 @@ def decision(req: CreditScoreRequest):
         }
 
     except HTTPException:
-        # rethrow FastAPI errors (e.g., fraud model failure)
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"/decision failed: {e}")
-
-
 
 
 # ============================================================
