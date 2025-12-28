@@ -292,22 +292,77 @@ def _safe_json_loads(s: str) -> list:
     except Exception:
         return []
 
-def build_grounded_context(decision: dict) -> str:
+
+def build_ui_shap_block(display_top_factors: list[dict] | None) -> str:
+    if not display_top_factors:
+        return ""
+    lines = []
+    for f in display_top_factors[:6]:
+        name = f.get("feature_label") or f.get("feature") or "Unknown"
+        ui_pct = f.get("ui_pct")
+        # keep impact optional (UI may not send it)
+        impact = f.get("impact")
+        direction = f.get("direction")
+        if ui_pct is None:
+            continue
+        lines.append(f"- {name}: ui_pct={ui_pct}%"
+                     + (f", direction={direction}" if direction else "")
+                     + (f", impact={impact}" if impact is not None else ""))
+    return "\n".join(lines)
+
+
+
+
+def build_grounded_context(
+    decision: dict,
+    display_top_factors: list[dict] | None = None
+) -> str:
+    """
+    Grounded context for LLM:
+    Priority:
+      1) UI-provided SHAP factors (display_top_factors) -> MUST match dashboard
+      2) DB shap_factors fallback (pct_influence or computed from impacts)
+    """
+
+    # -----------------------------
+    # 1) UI SHAP block (preferred)
+    # -----------------------------
+    ui_lines = []
+    if display_top_factors:
+        for f in display_top_factors:  # <-- no slice; supports 8+
+            name = f.get("feature_label") or f.get("feature") or f.get("name") or "Unknown"
+            ui_pct = f.get("ui_pct")
+            direction = f.get("direction")
+            value = f.get("value")
+
+            # Only include if ui_pct is present (dashboard percentage)
+            if ui_pct is None:
+                continue
+
+            # Keep compact & factual
+            ui_lines.append(
+                f"- {name}: value={value}, ui_pct={ui_pct}%, direction={direction}"
+            )
+
+    ui_txt = "\n".join(ui_lines) if ui_lines else "- (not provided by UI)"
+
+    # -----------------------------
+    # 2) DB SHAP block (fallback)
+    # -----------------------------
     shap_list = _safe_json_loads(decision.get("shap_factors") or "[]")
 
-    # ✅ Backward compatibility: if pct_influence missing, compute from impacts
+    # Backward compatibility: compute total_abs if needed
     total_abs = 0.0
     for f in shap_list:
         try:
             total_abs += abs(float(f.get("impact") or 0.0))
         except Exception:
             total_abs += 0.0
-    if total_abs == 0:
+    if total_abs == 0.0:
         total_abs = 1.0
 
-    # Keep it compact (LLM context should be small & factual)
-    top = []
-    for f in shap_list[:6]:
+    db_lines = []
+    for f in shap_list:  # <-- no slice; supports all features
         name = f.get("feature") or f.get("name") or "unknown_feature"
         val = f.get("value")
         impact = f.get("impact")
@@ -315,18 +370,20 @@ def build_grounded_context(decision: dict) -> str:
 
         pct = f.get("pct_influence")
         if pct is None:
-            # compute pct from impact if not stored
             try:
                 pct = round((abs(float(impact or 0.0)) / total_abs) * 100, 2)
             except Exception:
                 pct = 0.0
 
-        top.append(
-            f"- {name}: value={val}, pct_influence={pct}%, direction={direction}"
+        db_lines.append(
+            f"- {name}: value={val}, pct_influence={pct}%, direction={direction}, impact={impact}"
         )
 
-    top_txt = "\n".join(top) if top else "- (no shap factors logged)"
+    db_txt = "\n".join(db_lines) if db_lines else "- (no shap factors logged)"
 
+    # -----------------------------
+    # Final grounded context
+    # -----------------------------
     return f"""
 DECISION FACTS (ground truth):
 - decision_id: {decision.get("id")}
@@ -338,14 +395,19 @@ DECISION FACTS (ground truth):
 - fraud_label: {decision.get("fraud_label")}
 - created_at: {decision.get("created_at")}
 
-TOP_SHAP_FACTORS (model explainability):
-{top_txt}
+TOP_SHAP_FACTORS_UI (MUST MATCH DASHBOARD EXACTLY):
+{ui_txt}
+
+TOP_SHAP_FACTORS_DB (FALLBACK ONLY IF UI NOT PROVIDED):
+{db_txt}
 
 RULES:
-- Only use the DECISION FACTS + TOP_SHAP_FACTORS.
-- Do not invent new reasons.
-- If user asks something not covered, say you don't have enough info.
+- If TOP_SHAP_FACTORS_UI is present, you MUST use ONLY those factors and their ui_pct numbers.
+- NEVER recompute, renormalize, or invent any percentage values.
+- Do NOT introduce new factor names beyond the provided lists.
+- If user asks something not covered by the facts above, say: "Not enough information in ExplainChain."
 """.strip()
+
 
 
 def deterministic_fallback_answer(user_msg: str, decision: dict, mode: str, language: str) -> str:
@@ -1544,7 +1606,8 @@ async def chat(req: ChatRequest):
             return {"answer": faq, "grounded": True}
 
 
-        context = build_grounded_context(decision)
+        context = build_grounded_context(decision, req.display_top_factors)
+
 
         if req.mode == "auditor":
             style = "Write formal audit-ready explanation. Use PD and SHAP. Include impact and pct_influence."
@@ -1557,10 +1620,14 @@ async def chat(req: ChatRequest):
         lang = "Respond in Bangla." if req.language == "bn" else "Respond in English."
 
         system_prompt = (
-            "You are AI Credit Officer Assistant.\n"
-            "You must ONLY use the provided decision facts.\n"
-            "Never invent reasons.\n"
+        "You are AI Credit Officer Assistant.\n"
+        "You must ONLY use the provided DECISION FACTS and SHAP blocks.\n"
+        "If TOP_SHAP_FACTORS_UI is present, you MUST use its exact feature names and ui_pct numbers.\n"
+        "NEVER recompute or adjust percentages.\n"
+        "NEVER introduce any new factor names, new numbers, or new reasons.\n"
+        "If the answer is not fully supported by the provided facts, say: 'Not enough information in ExplainChain.'\n"
         )
+
 
 
         user_prompt = f"""

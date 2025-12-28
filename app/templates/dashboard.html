@@ -1353,7 +1353,7 @@ async function sendChat(){
     language: el("chatLang") ? el("chatLang").value : "en",
 
     // ✅ critical: send the SAME top-factors % shown in SHAP card
-    display_top_factors: (__lastDisplayedTopFactors || []).slice(0, 3)
+    display_top_factors: (__lastDisplayedTopFactors || [])
     };
 
 
@@ -1428,7 +1428,7 @@ function renderShapSuggested(top_factors){
     }))
     .filter(x => !Number.isNaN(x.impact))
     .sort((a,b) => Math.abs(b.impact) - Math.abs(a.impact))
-    .slice(0, 6);
+    .slice(0, 8);
 
   if(items.length === 0){
     rowsEl.innerHTML = `<div class="subtitle">No SHAP factors returned. Score a borrower first.</div>`;
