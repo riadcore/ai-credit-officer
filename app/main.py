@@ -225,12 +225,10 @@ def init_chat_db():
         """
     )
 
-    decision_id = cur.lastrowid
 
-        conn.commit()
+    conn.commit()
     conn.close()
 
-    return decision_id
 
 
 class ChatRequest(BaseModel):
